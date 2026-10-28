@@ -1,4 +1,4 @@
-﻿package com.ankitsilwal.buttonhatesyou.games
+package com.ankitsilwal.buttonhatesyou.games
 
 import android.graphics.Canvas
 import android.graphics.Path

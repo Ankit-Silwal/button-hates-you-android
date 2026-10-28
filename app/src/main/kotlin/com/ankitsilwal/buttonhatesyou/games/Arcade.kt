@@ -1,4 +1,4 @@
-﻿package com.ankitsilwal.buttonhatesyou.games
+package com.ankitsilwal.buttonhatesyou.games
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -35,6 +35,17 @@ object Arcade {
         GameSpec("flap") { FlapGame(it) },
         GameSpec("catch") { CatchGame(it) },
         GameSpec("whack") { WhackGame(it) },
+        GameSpec("stack") { StackGame(it) },
+        GameSpec("pop") { PopGame(it) },
+        GameSpec("simon") { SimonGame(it) },
+        GameSpec("hop") { HopGame(it) },
+        GameSpec("run") { RunGame(it) },
+        GameSpec("slice") { SliceGame(it) },
+        GameSpec("redlight") { RedlightGame(it) },
+        GameSpec("spam") { SpamGame(it) },
+        GameSpec("fizz") { FizzGame(it) },
+        GameSpec("pong") { PongGame(it) },
+        GameSpec("tightrope") { TightropeGame(it) },
     )
 
     // Display names, as on the web.
@@ -44,6 +55,15 @@ object Arcade {
         "whack" to "Whack-a-Button",
         "stack" to "Tower of Regret",
         "pop" to "Pop Tantrum",
+        "simon" to "Copy Me",
+        "hop" to "Sky Hop",
+        "run" to "Run Away",
+        "slice" to "Slice Spree",
+        "redlight" to "Freeze!",
+        "spam" to "Inbox Zero",
+        "fizz" to "Shaken Not Stirred",
+        "pong" to "Cursor Pong",
+        "tightrope" to "Wobble Walk",
     )
 
     fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id }
