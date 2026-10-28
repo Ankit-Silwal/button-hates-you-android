@@ -40,6 +40,7 @@ object Arcade {
         GameSpec("redlight") { RedlightGame(it) },
         GameSpec("spam") { SpamGame(it) },
         GameSpec("fizz") { FizzGame(it) },
+        GameSpec("pong") { PongGame(it) },
     )
 
     // Display names, as on the web.
@@ -52,6 +53,7 @@ object Arcade {
         "redlight" to "Freeze!",
         "spam" to "Inbox Zero",
         "fizz" to "Shaken Not Stirred",
+        "pong" to "Cursor Pong",
     )
 
     fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id }
