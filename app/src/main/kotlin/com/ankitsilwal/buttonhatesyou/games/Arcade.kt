@@ -68,7 +68,7 @@ object Arcade {
         "button-run" to "Button Run",
     )
 
-    fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id }
+    fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id } ?: pleaseDont.takeIf { it.id == id }
 
     // Please Don't is a story game, not in `games`: launch it in GameHost on its own.
     // The UI claims "please-dont" when it reports score >= 65 with over = true.

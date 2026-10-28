@@ -213,7 +213,12 @@ fun GameScreen(
                     paused = paused || offer != null || quitAsk,
                     onOver = { score, coins, ms ->
                         val before = Achievements.statsOf(store.wallet.value).best[gameId] ?: 0
-                        val earned = store.recordRun(gameId, score, coins, ms, continues)
+                        // Please Don't is a story game: finishing it (65 presses) claims it once
+                        val earned = if (spec.id == Arcade.pleaseDont.id) {
+                            if (score >= 65) store.claimStory(gameId) else null
+                        } else {
+                            store.recordRun(gameId, score, coins, ms, continues)
+                        }
                         val shown = if (info.payout?.coins == true) coins else score
                         result = RunResult(shown, coins, maxOf(before, shown), shown > before && shown > 0, earned, continues)
                         mode = Mode.Over

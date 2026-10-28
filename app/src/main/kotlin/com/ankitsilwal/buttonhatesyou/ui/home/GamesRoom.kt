@@ -59,10 +59,11 @@ import com.ankitsilwal.buttonhatesyou.ui.common.fmt
 import com.ankitsilwal.buttonhatesyou.ui.theme.Palette
 import kotlin.math.max
 
-/** The adventure games in menu order: the ones the arcade has first, then the ones still coming. */
+/** Please Don't first (the original game), then the adventure games in menu order: the ones the arcade has, then the ones still coming. */
 fun gameList(): List<GameInfo> {
     val ready = Arcade.games.mapNotNull { s -> Catalog.GAME[s.id]?.takeIf { it.payout != null } }
-    return ready + Catalog.ADVENTURE_GAMES.filter { g -> ready.none { it.id == g.id } }
+    val story = listOfNotNull(Catalog.GAME[Arcade.pleaseDont.id])
+    return story + ready + Catalog.ADVENTURE_GAMES.filter { g -> ready.none { it.id == g.id } }
 }
 
 /** The left panel: every game (src/hub/GamesPane.jsx). */
