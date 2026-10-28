@@ -82,9 +82,10 @@ fun GamesRoom(env: RoomEnv) {
     val games = remember { gameList() }
 
     Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color(0xFFF8EDDC), Palette.Bg, Color(0xFFEFDDC6))))) {
+        // starts under the top bar (and is clipped there), so cards never scroll behind the chips
         LazyColumn(
-            Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = env.topInset + 8.dp, bottom = env.bottomInset + 16.dp),
+            Modifier.fillMaxSize().padding(top = env.topInset),
+            contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 8.dp, bottom = env.bottomInset + 16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item(key = "head") {
