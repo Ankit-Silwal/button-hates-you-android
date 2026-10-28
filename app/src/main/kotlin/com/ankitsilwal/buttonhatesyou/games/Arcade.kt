@@ -34,6 +34,7 @@ object Arcade {
     val games: List<GameSpec> = listOf(
         GameSpec("flap") { FlapGame(it) },
         GameSpec("catch") { CatchGame(it) },
+        GameSpec("whack") { WhackGame(it) },
     )
 
     // Display names, as on the web.
