@@ -33,6 +33,7 @@ import com.ankitsilwal.buttonhatesyou.avatar.Look
 object Arcade {
     val games: List<GameSpec> = listOf(
         GameSpec("flap") { FlapGame(it) },
+        GameSpec("catch") { CatchGame(it) },
     )
 
     // Display names, as on the web.
