@@ -38,6 +38,7 @@ object Arcade {
         GameSpec("stack") { StackGame(it) },
         GameSpec("pop") { PopGame(it) },
         GameSpec("simon") { SimonGame(it) },
+        GameSpec("hop") { HopGame(it) },
     )
 
     // Display names, as on the web.
@@ -48,6 +49,7 @@ object Arcade {
         "stack" to "Tower of Regret",
         "pop" to "Pop Tantrum",
         "simon" to "Copy Me",
+        "hop" to "Sky Hop",
     )
 
     fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id }
