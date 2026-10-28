@@ -35,6 +35,8 @@ object Arcade {
         GameSpec("flap") { FlapGame(it) },
         GameSpec("catch") { CatchGame(it) },
         GameSpec("whack") { WhackGame(it) },
+        GameSpec("stack") { StackGame(it) },
+        GameSpec("pop") { PopGame(it) },
     )
 
     // Display names, as on the web.
