@@ -37,6 +37,10 @@ object Arcade {
         GameSpec("whack") { WhackGame(it) },
         GameSpec("stack") { StackGame(it) },
         GameSpec("pop") { PopGame(it) },
+        GameSpec("simon") { SimonGame(it) },
+        GameSpec("hop") { HopGame(it) },
+        GameSpec("run") { RunGame(it) },
+        GameSpec("slice") { SliceGame(it) },
     )
 
     // Display names, as on the web.
@@ -46,6 +50,10 @@ object Arcade {
         "whack" to "Whack-a-Button",
         "stack" to "Tower of Regret",
         "pop" to "Pop Tantrum",
+        "simon" to "Copy Me",
+        "hop" to "Sky Hop",
+        "run" to "Run Away",
+        "slice" to "Slice Spree",
     )
 
     fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id }

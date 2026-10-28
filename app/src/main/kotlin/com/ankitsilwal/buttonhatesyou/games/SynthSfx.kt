@@ -177,6 +177,8 @@ class SynthSfx(context: Context) : Sfx {
 
     private fun render(): Map<String, ShortArray> {
         val m = HashMap<String, ShortArray>()
+        // Copy Me's four pad notes (web sound.beep(f): a 0.25 s sine)
+        for (f in intArrayOf(262, 330, 392, 523)) m["beep$f"] = pcm(tone(0.25f, f.toFloat(), f.toFloat(), 0.55f, decay = 7f))
         m["click"] = pcm(click())
         m["tick"] = pcm(tone(0.035f, 1900f, 1900f, 0.35f, decay = 90f, wave = 0))
         m["pop"] = pcm(pop())
