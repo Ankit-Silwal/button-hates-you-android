@@ -41,6 +41,7 @@ object Arcade {
         GameSpec("hop") { HopGame(it) },
         GameSpec("run") { RunGame(it) },
         GameSpec("slice") { SliceGame(it) },
+        GameSpec("button-run") { ButtonRunGame(it) },
     )
 
     // Display names, as on the web.
@@ -54,6 +55,7 @@ object Arcade {
         "hop" to "Sky Hop",
         "run" to "Run Away",
         "slice" to "Slice Spree",
+        "button-run" to "Button Run",
     )
 
     fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id }
