@@ -1,4 +1,4 @@
-﻿package com.ankitsilwal.buttonhatesyou.games
+package com.ankitsilwal.buttonhatesyou.games
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background

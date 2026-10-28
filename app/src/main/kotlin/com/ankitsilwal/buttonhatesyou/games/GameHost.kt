@@ -1,4 +1,4 @@
-﻿package com.ankitsilwal.buttonhatesyou.games
+package com.ankitsilwal.buttonhatesyou.games
 
 import android.util.Log
 import androidx.compose.foundation.Canvas
