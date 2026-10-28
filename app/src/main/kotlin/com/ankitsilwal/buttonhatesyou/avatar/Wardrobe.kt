@@ -586,7 +586,7 @@ internal object Wardrobe {
     private val PARTY_CONE by lazy { poly(56.8f, -40f, 73.8f, 6f, 39.8f, 6f) }
     private val PARTY_STRIPES = Brush.linearGradient(
         0f to Color(0xFF8FB8D8), 0.5f to Color(0xFF8FB8D8), 0.5f to Color(0xFFF3A6A0), 1f to Color(0xFFF3A6A0),
-        start = Offset(39.8f, -40f), end = Offset(39.8f + 5.8f, -40f + 5.8f), tileMode = TileMode.Repeated,
+        start = Offset(39.8f, -40f), end = Offset(39.8f + 9.6f, -40f + 9.6f), tileMode = TileMode.Repeated,
     )
     private val TOP_CROWN by lazy {
         Path().apply {

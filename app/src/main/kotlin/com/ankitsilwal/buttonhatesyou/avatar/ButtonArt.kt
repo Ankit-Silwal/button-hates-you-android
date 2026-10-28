@@ -417,8 +417,9 @@ private object ButtonPainter {
             val wob = sin(t * 9f + side) * 0.5f
             val dx = -1.85f + 4.15f * p + wob
             val dy = -2.3f + 3.7f * p
-            drawCircle(INK, 4.62f, Offset(cx - 0.44f + dx, cy + 3.7f + dy - 2f))
-            drawCircle(Color.White.copy(alpha = 0.85f), 1f, Offset(cx - 1.8f + dx, cy + 0.4f + dy))
+            val pc = Offset(cx - 0.44f + dx, cy + 1.7f + dy)
+            drawCircle(INK, 4.62f, pc)
+            drawCircle(Color.White.copy(alpha = 0.85f), 1.1f, pc + Offset(-1.6f, -1.6f))
         }
     }
 
