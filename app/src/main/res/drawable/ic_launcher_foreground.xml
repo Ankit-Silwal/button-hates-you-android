@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The button: a round tomato body with a darker base, two eyes and a smirk. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:fillColor="#B84A36" android:pathData="M54,32a22,22 0,1 1,0 48a22,22 0,1 1,0 -48z" />
+    <path android:fillColor="#E2674F" android:pathData="M54,28a22,22 0,1 1,0 44a22,22 0,1 1,0 -44z" />
+    <path android:fillColor="#40FFFFFF" android:pathData="M42,36a8,4 -30,1 1,6 4a8,4 -30,1 1,-6 -4z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M46,44a3.6,4.4 0,1 1,0 8.8a3.6,4.4 0,1 1,0 -8.8z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M62,44a3.6,4.4 0,1 1,0 8.8a3.6,4.4 0,1 1,0 -8.8z" />
+    <path android:fillColor="#2B1D17" android:pathData="M46.6,47a1.8,2 0,1 1,0 4a1.8,2 0,1 1,0 -4z" />
+    <path android:fillColor="#2B1D17" android:pathData="M62.6,47a1.8,2 0,1 1,0 4a1.8,2 0,1 1,0 -4z" />
+    <path android:fillColor="#E2674F" android:pathData="M42,42h24v4h-24z" />
+    <path android:strokeColor="#2B1D17" android:strokeWidth="2.2" android:strokeLineCap="round" android:pathData="M49,60q6,3 11,-2" />
+</vector>
