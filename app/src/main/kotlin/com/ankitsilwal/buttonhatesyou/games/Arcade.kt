@@ -41,6 +41,11 @@ object Arcade {
         GameSpec("hop") { HopGame(it) },
         GameSpec("run") { RunGame(it) },
         GameSpec("slice") { SliceGame(it) },
+        GameSpec("redlight") { RedlightGame(it) },
+        GameSpec("spam") { SpamGame(it) },
+        GameSpec("fizz") { FizzGame(it) },
+        GameSpec("pong") { PongGame(it) },
+        GameSpec("tightrope") { TightropeGame(it) },
     )
 
     // Display names, as on the web.
@@ -54,6 +59,11 @@ object Arcade {
         "hop" to "Sky Hop",
         "run" to "Run Away",
         "slice" to "Slice Spree",
+        "redlight" to "Freeze!",
+        "spam" to "Inbox Zero",
+        "fizz" to "Shaken Not Stirred",
+        "pong" to "Cursor Pong",
+        "tightrope" to "Wobble Walk",
     )
 
     fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id }
