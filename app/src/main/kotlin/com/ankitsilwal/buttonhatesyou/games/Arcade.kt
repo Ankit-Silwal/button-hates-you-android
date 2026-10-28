@@ -46,6 +46,7 @@ object Arcade {
         GameSpec("fizz") { FizzGame(it) },
         GameSpec("pong") { PongGame(it) },
         GameSpec("tightrope") { TightropeGame(it) },
+        GameSpec("button-run") { ButtonRunGame(it) },
     )
 
     // Display names, as on the web.
@@ -64,9 +65,14 @@ object Arcade {
         "fizz" to "Shaken Not Stirred",
         "pong" to "Cursor Pong",
         "tightrope" to "Wobble Walk",
+        "button-run" to "Button Run",
     )
 
     fun byId(id: String): GameSpec? = games.firstOrNull { it.id == id }
+
+    // Please Don't is a story game, not in `games`: launch it in GameHost on its own.
+    // The UI claims "please-dont" when it reports score >= 65 with over = true.
+    val pleaseDont: GameSpec = GameSpec("please-dont") { PleaseDontGame(it) }
 }
 
 // Dev-only: a list of the games; tap one to play it in GameHost. Not wired
