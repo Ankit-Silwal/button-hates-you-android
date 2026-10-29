@@ -1,6 +1,7 @@
 package com.ankitsilwal.buttonhatesyou.ui.art
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -21,8 +22,10 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ankitsilwal.buttonhatesyou.Preload
 
 // Flat line icons for the games, drawn on a 24x24 grid in white on the game's
 // tile colour. Used instead of emoji in the Games room and on a game's title card.
@@ -54,6 +57,19 @@ fun GameIconTile(id: String, modifier: Modifier = Modifier, corner: Dp = 22.dp) 
             .border(1.dp, Color.White.copy(alpha = 0.35f), shape),
     ) {
         Canvas(Modifier.fillMaxSize().padding(corner * 0.9f)) { gameIcon(id) }
+    }
+}
+
+/**
+ * The game's picture: a real still of it (drawn by Preload, wearing the
+ * player's look), cropped to fill. Falls back to the icon tile if there's none.
+ */
+@Composable
+fun GameArt(id: String, modifier: Modifier = Modifier, corner: Dp = 22.dp) {
+    val shot = Preload.thumbs[id] ?: return GameIconTile(id, modifier, corner)
+    val shape = RoundedCornerShape(corner)
+    Box(modifier.clip(shape).background(gameTint(id)).border(2.dp, Color.White, shape)) {
+        Image(shot, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
     }
 }
 

@@ -3,12 +3,14 @@ package com.ankitsilwal.buttonhatesyou
 import android.content.Context
 import android.os.SystemClock
 import android.util.Log
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import com.ankitsilwal.buttonhatesyou.avatar.Look
@@ -30,7 +32,8 @@ import com.ankitsilwal.buttonhatesyou.ui.art.gameIcon
 /**
  * Loads what the app would otherwise load on first use, while the splash
  * screen is up: the save file (read and replayed), the synthesized sounds,
- * and one off-screen frame of every room prop, house item and game, which
+ * and one off-screen frame of every room prop, house item and game (kept as
+ * the game's picture in [thumbs]), which
  * parses their SVG paths into the shared caches, builds the games' sprites and
  * gets their code loaded and warm. After that, rooms and games open without
  * a first-frame hitch.
@@ -45,6 +48,17 @@ object Preload {
         private set
 
     private var started = false
+
+    /** A still of each game (its id → a portrait picture), drawn during the warm-up. */
+    @Volatile
+    var thumbs: Map<String, ImageBitmap> = emptyMap()
+        private set
+
+    // thumbnails crop the 480x800 world to a 3:4 below its HUD and keep it at this width
+    private const val THUMB_W = 300
+    private const val THUMB_H = 400
+    private const val SHOT_TOP = 130f // below the score and the hint text
+    private val TOUCH_TO_START = setOf("slice")
     private var waiting: (() -> Unit)? = null // the latest activity's callback
 
     /** Starts the warm-up once; [onReady] runs on its thread when done (now, if it already is). */
@@ -60,8 +74,10 @@ object Preload {
         val app = context.applicationContext
         Thread({
             val t0 = SystemClock.elapsedRealtime()
+            var look = Look()
             step("profile") {
                 val store = ProfileStore.get(app)
+                look = Catalog.lookOf(store.wallet.value.equipped)
                 Achievements.statsOf(store.wallet.value)
                 store.currentNeeds()
             }
@@ -83,14 +99,32 @@ object Preload {
             }
             step("games") {
                 val quiet = Quiet
+                val shots = HashMap<String, ImageBitmap>()
+                val k = THUMB_W / WORLD_W
+                val top = SHOT_TOP.coerceAtMost(WORLD_H - THUMB_H / k)
                 for (spec in Arcade.games + Arcade.pleaseDont) {
                     step("game ${spec.id}") {
-                        val game = spec.create(GameContext(Look(), quiet, quiet))
-                        repeat(10) { game.update(1f / 60f) }
-                        frame { with(game) { draw() } }
+                        val game = spec.create(GameContext(look, quiet, quiet))
+                        // games that wait for a touch get one, so their picture isn't an empty title
+                        if (spec.id in TOUCH_TO_START) {
+                            game.down(12f, WORLD_H - 12f)
+                            game.up(12f, WORLD_H - 12f)
+                        }
+                        repeat(if (spec.id in TOUCH_TO_START) 70 else 30) { game.update(1f / 60f) }
                         frame { gameIcon(spec.id) }
+                        // the still: the middle of the world, scaled down
+                        val shot = ImageBitmap(THUMB_W, THUMB_H)
+                        scope.draw(Density(app.resources.displayMetrics.density), LayoutDirection.Ltr, Canvas(shot), Size(THUMB_W.toFloat(), THUMB_H.toFloat())) {
+                            withTransform({
+                                scale(k, k, Offset.Zero)
+                                translate(0f, -top)
+                            }) { with(game) { draw() } }
+                        }
+                        shot.prepareToDraw()
+                        shots[spec.id] = shot
                     }
                 }
+                thumbs = shots
             }
             Log.i("Preload", "warmed up in ${SystemClock.elapsedRealtime() - t0} ms")
             val done = synchronized(this) {

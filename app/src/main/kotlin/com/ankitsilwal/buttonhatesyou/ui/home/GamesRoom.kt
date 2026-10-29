@@ -41,7 +41,7 @@ import com.ankitsilwal.buttonhatesyou.economy.Catalog
 import com.ankitsilwal.buttonhatesyou.economy.GameInfo
 import com.ankitsilwal.buttonhatesyou.economy.Needs
 import com.ankitsilwal.buttonhatesyou.games.Arcade
-import com.ankitsilwal.buttonhatesyou.ui.art.GameIconTile
+import com.ankitsilwal.buttonhatesyou.ui.art.GameArt
 import com.ankitsilwal.buttonhatesyou.ui.common.LocalFeedback
 import com.ankitsilwal.buttonhatesyou.ui.common.Pill
 import com.ankitsilwal.buttonhatesyou.ui.common.PillKind
@@ -104,7 +104,7 @@ fun GamesRoom(env: RoomEnv) {
     }
 }
 
-/** One game in the grid: its icon tile and its name. */
+/** One game in the grid: a picture of it and its name. */
 @Composable
 private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, onPlay: () -> Unit) {
     val fb = LocalFeedback.current
@@ -120,10 +120,10 @@ private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, onPlay: () -> Uni
         Box(
             Modifier
                 .fillMaxWidth()
-                .aspectRatio(1f)
+                .aspectRatio(0.75f)
                 .shadow(if (soon) 0.dp else 6.dp, RoundedCornerShape(22.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow),
         ) {
-            GameIconTile(g.id, Modifier.fillMaxSize())
+            GameArt(g.id, Modifier.fillMaxSize())
             if (soon) {
                 Text(
                     "SOON",
