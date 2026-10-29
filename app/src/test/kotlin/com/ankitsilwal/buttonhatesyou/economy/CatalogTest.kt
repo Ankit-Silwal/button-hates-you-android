@@ -31,7 +31,7 @@ class CatalogTest {
 
     @Test fun `games and their payouts`() {
         assertEquals(18, Catalog.GAMES.size)
-        assertEquals(15, Catalog.ADVENTURE_GAMES.size) // Button Run and the 14 GameSpec ids
+        assertEquals(9, Catalog.ADVENTURE_GAMES.size) // Button Run and the 8 other GameSpec ids (retired games excluded)
         val flap = Catalog.GAME.getValue("flap")
         assertEquals("+25 🪙 per 10 pipes, rising", flap.prize)
         assertEquals("Every 10 pipes pays more: 25, 50, 75… 🪙", flap.rule)
@@ -45,5 +45,10 @@ class CatalogTest {
         assertEquals(16, Catalog.STORY_REWARDS.size)
         assertEquals(Prize(1500), Catalog.STORY_REWARDS["reason:9"])
         assertTrue(Catalog.GAMES.all { it.color ushr 24 == 0xFFL })
+        // retired games can't be played, but old runs of them still pay on replay
+        for (id in Catalog.RETIRED) {
+            assertNotNull(Catalog.GAME[id]?.payout)
+            assertTrue(Catalog.ADVENTURE_GAMES.none { it.id == id })
+        }
     }
 }

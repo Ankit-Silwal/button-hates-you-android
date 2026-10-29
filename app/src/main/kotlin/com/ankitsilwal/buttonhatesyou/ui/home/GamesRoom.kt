@@ -1,7 +1,6 @@
 package com.ankitsilwal.buttonhatesyou.ui.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +41,7 @@ import com.ankitsilwal.buttonhatesyou.economy.Catalog
 import com.ankitsilwal.buttonhatesyou.economy.GameInfo
 import com.ankitsilwal.buttonhatesyou.economy.Needs
 import com.ankitsilwal.buttonhatesyou.games.Arcade
+import com.ankitsilwal.buttonhatesyou.ui.art.GameIconTile
 import com.ankitsilwal.buttonhatesyou.ui.common.LocalFeedback
 import com.ankitsilwal.buttonhatesyou.ui.common.Pill
 import com.ankitsilwal.buttonhatesyou.ui.common.PillKind
@@ -104,7 +104,7 @@ fun GamesRoom(env: RoomEnv) {
     }
 }
 
-/** One game in the grid: its icon on its colour, and its name. */
+/** One game in the grid: its icon tile and its name. */
 @Composable
 private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, onPlay: () -> Unit) {
     val fb = LocalFeedback.current
@@ -121,13 +121,9 @@ private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, onPlay: () -> Uni
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .shadow(if (soon) 0.dp else 6.dp, RoundedCornerShape(22.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow)
-                .clip(RoundedCornerShape(22.dp))
-                .background(Brush.verticalGradient(listOf(Color(g.color).copy(alpha = 0.85f), Color(g.color))))
-                .border(2.dp, Color.White, RoundedCornerShape(22.dp)),
-            contentAlignment = Alignment.Center,
+                .shadow(if (soon) 0.dp else 6.dp, RoundedCornerShape(22.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow),
         ) {
-            Text(g.emoji, fontSize = 40.sp)
+            GameIconTile(g.id, Modifier.fillMaxSize())
             if (soon) {
                 Text(
                     "SOON",

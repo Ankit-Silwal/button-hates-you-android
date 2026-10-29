@@ -347,6 +347,10 @@ object Catalog {
 
     val GAME: Map<String, GameInfo> = GAMES.associateBy { it.id }
 
+    // Games taken out of the app. They stay in GAMES so runs already in a
+    // wallet's history still replay and pay; they just can't be played any more.
+    val RETIRED: Set<String> = setOf("catch", "redlight", "spam", "fizz", "pong", "tightrope")
+
     // The Adventure games (the ones the Android app plays).
-    val ADVENTURE_GAMES: List<GameInfo> get() = GAMES.filter { it.payout != null }
+    val ADVENTURE_GAMES: List<GameInfo> get() = GAMES.filter { it.payout != null && it.id !in RETIRED }
 }

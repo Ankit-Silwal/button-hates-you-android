@@ -114,7 +114,6 @@ object Achievements {
         /* ---------- Adventure ---------- */
         scoreAch("flap", "Pipe Dreams", "🪽", listOf(10, 20, 40)),
         scoreAch("pop", "Family Feud", "🫧", listOf(1000, 2000, 4000)),
-        scoreAch("catch", "Stress Eater", "🍩", listOf(25, 50, 100)),
         scoreAch("simon", "Elephant Brain", "🎵", listOf(5, 10, 20)),
         scoreAch("hop", "Social Distancing", "☁️", listOf(2000, 4000, 8000)),
         scoreAch("whack", "Anger Management", "🔨", listOf(20, 40, 80)),
@@ -156,7 +155,12 @@ object Achievements {
         ach("streak", "daily", "🔥", "Streak Freak", { it.bestStreak }, { n -> "Open the chest $n days in a row" }, 3 to 1, 7 to 2, 30 to 5),
     )
 
-    val ACHIEVEMENT: Map<String, Achievement> = ACHIEVEMENTS.associateBy { it.id }
+    // Achievements of retired games: hidden, but kept so levels already claimed still replay.
+    private val RETIRED: List<Achievement> = listOf(
+        scoreAch("catch", "Stress Eater", "🍩", listOf(25, 50, 100)),
+    )
+
+    val ACHIEVEMENT: Map<String, Achievement> = (ACHIEVEMENTS + RETIRED).associateBy { it.id }
 
     // All the diamonds achievements can ever pay.
     val ACHIEVEMENT_DIAMONDS: Int = ACHIEVEMENTS.sumOf { a -> a.levels.sumOf { it.diamonds } }

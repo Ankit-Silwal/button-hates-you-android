@@ -33,7 +33,6 @@ import com.ankitsilwal.buttonhatesyou.avatar.Look
 object Arcade {
     val games: List<GameSpec> = listOf(
         GameSpec("flap") { FlapGame(it) },
-        GameSpec("catch") { CatchGame(it) },
         GameSpec("whack") { WhackGame(it) },
         GameSpec("stack") { StackGame(it) },
         GameSpec("pop") { PopGame(it) },
@@ -41,18 +40,12 @@ object Arcade {
         GameSpec("hop") { HopGame(it) },
         GameSpec("run") { RunGame(it) },
         GameSpec("slice") { SliceGame(it) },
-        GameSpec("redlight") { RedlightGame(it) },
-        GameSpec("spam") { SpamGame(it) },
-        GameSpec("fizz") { FizzGame(it) },
-        GameSpec("pong") { PongGame(it) },
-        GameSpec("tightrope") { TightropeGame(it) },
         GameSpec("button-run") { ButtonRunGame(it) },
     )
 
     // Display names, as on the web.
     val titles: Map<String, String> = mapOf(
         "flap" to "Flappy Regret",
-        "catch" to "Snack Attack",
         "whack" to "Whack-a-Button",
         "stack" to "Tower of Regret",
         "pop" to "Pop Tantrum",
@@ -60,11 +53,6 @@ object Arcade {
         "hop" to "Sky Hop",
         "run" to "Run Away",
         "slice" to "Slice Spree",
-        "redlight" to "Freeze!",
-        "spam" to "Inbox Zero",
-        "fizz" to "Shaken Not Stirred",
-        "pong" to "Cursor Pong",
-        "tightrope" to "Wobble Walk",
         "button-run" to "Button Run",
     )
 

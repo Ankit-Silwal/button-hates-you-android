@@ -68,6 +68,7 @@ import com.ankitsilwal.buttonhatesyou.games.Arcade
 import com.ankitsilwal.buttonhatesyou.games.Game
 import com.ankitsilwal.buttonhatesyou.games.GameHost
 import com.ankitsilwal.buttonhatesyou.games.GameSpec
+import com.ankitsilwal.buttonhatesyou.ui.art.GameIconTile
 import com.ankitsilwal.buttonhatesyou.ui.common.IconChip
 import com.ankitsilwal.buttonhatesyou.ui.common.Pill
 import com.ankitsilwal.buttonhatesyou.ui.common.PillKind
@@ -265,7 +266,7 @@ fun GameScreen(
 
         if (mode == Mode.Title) {
             Backdrop(info) {
-                Text(info.emoji, fontSize = 56.sp)
+                GameIconTile(info.id, Modifier.size(84.dp), corner = 22.dp)
                 Text(info.name, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
                 Text(info.blurb, textAlign = TextAlign.Center, color = Palette.InkSoft)
                 Text(info.howTo ?: "", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, modifier = Modifier.background(Palette.Wall, RoundedCornerShape(14.dp)).padding(10.dp))
