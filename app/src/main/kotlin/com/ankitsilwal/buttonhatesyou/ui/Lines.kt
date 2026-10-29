@@ -53,6 +53,7 @@ object Lines {
     val LATHER_LINES = listOf("Okay, I'm all foamy. Now drag me into the shower!", "Peak bubbles. Shower time. Drag me in.")
     val DONE_LINES = listOf("Squeaky clean. I smell like a meadow.", "Fresh. Do not touch. You will smudge me.", "New button, who dis?")
     const val ASLEEP_HINT = "Zzz… (he is asleep. Wake him up in the Bedroom first)"
+    val SOAP_REFUSED = listOf("Zzz… *swats the soap away* …no bath…", "Mmph. No soap. Sleeping.", "Zzz… *the soap will not budge* (wake him up first)")
 
     // decorating / shopping
     val BOUGHT = listOf("Bought and put up. Looks great.", "Ooh. Fancy.", "Finally, some taste in here.")

@@ -93,6 +93,27 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
     var showerStart by remember { mutableStateOf(0L) }
     val dirty = needs.dirt >= 5
     val face = env.face
+    val asleep = rememberUpdatedState(needs.asleep) // read from gesture callbacks, which outlive a composition
+    val soapShake = remember { Animatable(0f) }
+
+    // dozing off mid-bath washes out the half-done lather
+    LaunchedEffect(needs.asleep) {
+        if (needs.asleep && phase != Phase.Shower) {
+            phase = Phase.Idle
+            scrub = 0f
+            soapAt = null
+            dragging = false
+        }
+    }
+
+    // the soap will not be picked up while he sleeps: it wobbles "no" on the vanity
+    fun refuseSoap() {
+        speaker.say(Lines.pick(Lines.SOAP_REFUSED))
+        fb.thud()
+        scope.launch {
+            for (x in listOf(-1f, 1f, -0.7f, 0.7f, -0.35f, 0f)) soapShake.animateTo(x, tween(55))
+        }
+    }
 
     LaunchedEffect(active) {
         if (!active || phase != Phase.Idle) return@LaunchedEffect
@@ -117,7 +138,7 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
     }
 
     fun canScrub(): Boolean {
-        if (needs.asleep) { speaker.say(Lines.ASLEEP_HINT); return false }
+        if (asleep.value) { speaker.say(Lines.ASLEEP_HINT); return false }
         if (!dirty && phase == Phase.Idle) { speaker.say(Lines.pick(Lines.CLEAN_LINES)); return false }
         return phase == Phase.Idle
     }
@@ -131,7 +152,7 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
     }
 
     fun startShower() {
-        if (needs.asleep) return speaker.say(Lines.ASLEEP_HINT)
+        if (asleep.value) return speaker.say(Lines.ASLEEP_HINT)
         if (phase != Phase.Lather) return speaker.say(if (scrub > 0) "Not foamy enough yet. Keep scrubbing!" else "Water alone will not cut it. Soap first!")
         phase = Phase.Shower
         showerStart = System.currentTimeMillis()
@@ -223,7 +244,8 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
                             .pointerInput(g) {
                                 detectDragGestures(
                                     onDragStart = {
-                                        if (phaseState.value == Phase.Lather) dragging = true
+                                        if (asleep.value) speaker.say(Lines.ASLEEP_POKE)
+                                        else if (phaseState.value == Phase.Lather) dragging = true
                                         else if (phaseState.value == Phase.Idle) speaker.say("Soap first. Drag the soap over me.")
                                     },
                                     onDrag = { ch, d ->
@@ -298,20 +320,22 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
                     var last by remember { mutableStateOf<Offset?>(null) }
                     Box(
                         Modifier
-                            .offset { IntOffset((at.x - touch / 2).roundToInt(), (at.y - touch / 2).roundToInt()) }
+                            .offset { IntOffset((at.x - touch / 2 + soapShake.value * sw * 0.18f).roundToInt(), (at.y - touch / 2).roundToInt()) }
                             .size(with(density) { touch.toDp() })
                             .semantics { contentDescription = "Soap. Drag it over the button to scrub him." }
                             .pointerInput(g) {
                                 detectDragGestures(
                                     onDragStart = { o ->
-                                        if (needs.asleep) {
-                                            speaker.say(Lines.ASLEEP_HINT)
+                                        if (asleep.value) {
+                                            refuseSoap()
+                                        } else {
+                                            soapAt = Offset(at.x - touch / 2 + o.x, at.y - touch / 2 + o.y)
+                                            last = soapAt
                                         }
-                                        soapAt = Offset(at.x - touch / 2 + o.x, at.y - touch / 2 + o.y)
-                                        last = soapAt
                                     },
                                     onDrag = { ch, d ->
                                         ch.consume()
+                                        if (asleep.value || soapAt == null) return@detectDragGestures
                                         val now = (soapAt ?: rest) + d
                                         soapAt = now
                                         val from = last
@@ -333,7 +357,7 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
                         Canvas(
                             Modifier
                                 .size(with(density) { sw.toDp() }, with(density) { sh.toDp() })
-                                .graphicsLayer { scaleX = if (held) 1.15f else 1f; scaleY = if (held) 1.15f else 1f; rotationZ = if (held) -8f else 0f },
+                                .graphicsLayer { scaleX = if (held) 1.15f else 1f; scaleY = if (held) 1.15f else 1f; rotationZ = if (held) -8f else soapShake.value * 14f; alpha = if (needs.asleep) 0.7f else 1f },
                         ) { SceneArt.soap(this, Rect(0f, 0f, size.width, size.height), held) }
                     }
                 },
@@ -355,8 +379,8 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
             }
             Text(note, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Palette.Ink, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
             PillRow {
-                Pill("Scrub", ::scrubTap, icon = "🧼", kind = PillKind.Alt, index = 0, modifier = Modifier.weight(1f))
-                Pill("Shower", ::startShower, icon = "🚿", enabled = phase == Phase.Lather, index = 1, modifier = Modifier.weight(1.2f))
+                Pill("Scrub", { if (needs.asleep) refuseSoap() else scrubTap() }, icon = "🧼", kind = PillKind.Alt, index = 0, modifier = Modifier.weight(1f))
+                Pill("Shower", ::startShower, icon = "🚿", enabled = phase == Phase.Lather && !needs.asleep, index = 1, modifier = Modifier.weight(1.2f))
             }
         },
     )
