@@ -165,8 +165,8 @@ private fun MainPanel(info: GameInfo, score: Int?, best: Int, onResume: () -> Un
             GameIconTile(info.id, Modifier.size(56.dp), corner = 16.dp)
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text("PAUSED", color = Soft, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 2.5.sp)
-                Text(info.name, color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, maxLines = 1)
+                Text("PAUSED", color = Soft, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.5.sp)
+                Text(info.name, color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, maxLines = 1)
             }
         }
         Spacer(Modifier.height(18.dp))
@@ -191,9 +191,9 @@ private fun Stat(label: String, value: String, unit: String?, modifier: Modifier
             .border(1.dp, Color(0x14FFFFFF), RoundedCornerShape(16.dp))
             .padding(horizontal = 14.dp, vertical = 10.dp),
     ) {
-        Text(label, color = Soft, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.5.sp)
+        Text(label, color = Soft, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp)
         Row(verticalAlignment = Alignment.Bottom) {
-            Text(value, color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, maxLines = 1)
+            Text(value, color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold, maxLines = 1)
             if (unit != null && value != "–") {
                 Text(" $unit", color = Soft, fontSize = 12.sp, fontWeight = FontWeight.Bold, maxLines = 1, modifier = Modifier.padding(bottom = 4.dp))
             }
@@ -211,7 +211,7 @@ private fun ConfirmPanel(icon: DrawScope.(Color) -> Unit, tint: Color, title: St
             Canvas(Modifier.size(34.dp)) { icon(tint) }
         }
         Spacer(Modifier.height(14.dp))
-        Text(title, color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+        Text(title, color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
         Spacer(Modifier.height(6.dp))
         Text(body, color = Soft, fontSize = 14.sp, lineHeight = 19.sp, textAlign = TextAlign.Center)
         Spacer(Modifier.height(20.dp))
@@ -275,7 +275,7 @@ private fun MenuButton(
         }
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
-            Text(label, color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
+            Text(label, color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
             Text(hint, color = if (primary) Color(0xD9FFFFFF) else Soft, fontSize = 12.sp)
         }
         Canvas(Modifier.size(14.dp)) { chevron(if (primary) Color.White else Soft) }
@@ -293,7 +293,7 @@ private fun FlatButton(text: String, bg: Color, fg: Color, modifier: Modifier, o
             .clickable(role = Role.Button) { fb.tick(); onClick() },
         contentAlignment = Alignment.Center,
     ) {
-        Text(text, color = fg, fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
+        Text(text, color = fg, fontSize = 16.sp, fontWeight = FontWeight.Bold)
     }
 }
 

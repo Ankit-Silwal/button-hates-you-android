@@ -255,7 +255,7 @@ private fun StockItem(id: String, name: String, count: Int, enabled: Boolean, on
                 .border(1.5.dp, Color.White, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
-            IconText("$count", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+            IconText("$count", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

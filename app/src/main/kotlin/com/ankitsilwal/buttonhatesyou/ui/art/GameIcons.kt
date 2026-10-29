@@ -69,7 +69,7 @@ fun GameIconTile(id: String, modifier: Modifier = Modifier, corner: Dp = 22.dp) 
 fun GameArt(id: String, modifier: Modifier = Modifier, corner: Dp = 22.dp) {
     val shot = Preload.thumbs[id] ?: return GameIconTile(id, modifier, corner)
     val shape = RoundedCornerShape(corner)
-    Box(modifier.clip(shape).background(gameTint(id)).border(2.dp, Color.White, shape)) {
+    Box(modifier.clip(shape).background(gameTint(id)).border(1.dp, Color(0x1A000000), shape)) {
         Image(shot, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
     }
 }

@@ -303,15 +303,15 @@ fun GameScreen(
                     Box(Modifier.size(110.dp, 120.dp), contentAlignment = Alignment.Center) {
                         Avatar(look, Face(mood = if (good) Mood.Sad else Mood.Smug), size = 74.dp)
                     }
-                    IconText(if (good) "NICE RUN" else "GAME OVER", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, color = Palette.InkSoft)
+                    IconText(if (good) "NICE RUN" else "GAME OVER", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft)
                     Row(verticalAlignment = Alignment.Bottom) {
-                        IconText(fmt(r.score), fontSize = 44.sp, fontWeight = FontWeight.ExtraBold)
+                        IconText(fmt(r.score), fontSize = 44.sp, fontWeight = FontWeight.Bold)
                         IconText(" " + (info.unit ?: ""), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft, modifier = Modifier.padding(bottom = 8.dp))
                     }
                     IconText((if (r.newBest) "New best!" else "Best: ${fmt(r.best)}") + if (r.continues > 0) " · Continued ×${r.continues}" else "", fontWeight = FontWeight.Bold, color = if (r.newBest) Palette.BtnDark else Palette.Ink)
                     IconText("“${if (good) info.quips?.goal else info.quips?.fail}”", fontStyle = FontStyle.Italic, textAlign = TextAlign.Center, color = Palette.InkSoft)
                     val coins = r.earned?.coins ?: 0
-                    IconText("+${fmt(coins)} 🪙" + ((r.earned?.diamonds ?: 0).takeIf { it > 0 }?.let { " +$it 💎" } ?: ""), fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, color = if (coins > 0) Color(0xFF8A5A10) else Palette.InkSoft, modifier = Modifier.background(Color(0xFFFFEFC4), RoundedCornerShape(50)).padding(horizontal = 18.dp, vertical = 6.dp))
+                    IconText("+${fmt(coins)} 🪙" + ((r.earned?.diamonds ?: 0).takeIf { it > 0 }?.let { " +$it 💎" } ?: ""), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = if (coins > 0) Color(0xFF8A5A10) else Palette.InkSoft, modifier = Modifier.background(Color(0xFFFFEFC4), RoundedCornerShape(50)).padding(horizontal = 18.dp, vertical = 6.dp))
                     val ready = r.earned?.ready.orEmpty()
                     if (ready.isNotEmpty()) {
                         val names = ready.map { it.name }
@@ -376,7 +376,7 @@ private fun ContinueCard(offer: Offer, diamonds: Int, onYes: () -> Unit, onNo: (
     PopCard(onNo, dismissable = false) {
         Box(Modifier.size(84.dp), contentAlignment = Alignment.Center) {
             Canvas(Modifier.size(84.dp)) { ringArc(ring.value) }
-            IconText("${kotlin.math.ceil(ring.value * OFFER_SEC).toInt()}", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+            IconText("${kotlin.math.ceil(ring.value * OFFER_SEC).toInt()}", fontSize = 28.sp, fontWeight = FontWeight.Bold)
         }
         IconText("Continue?", style = MaterialTheme.typography.headlineSmall)
         IconText("Pick up right where you crashed, score and all.", color = Palette.InkSoft, textAlign = TextAlign.Center)

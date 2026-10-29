@@ -114,9 +114,9 @@ fun AchievementsScreen(store: ProfileStore, wallet: Wallet, look: Look, onBack: 
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(if (chest.ready) Color(0xFFFFEFC4) else Palette.Cream)
-                        .border(1.dp, Color.White, RoundedCornerShape(20.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Palette.Surface)
+                        .border(if (chest.ready) 1.5.dp else 1.dp, if (chest.ready) Palette.Warn else Palette.Hairline, RoundedCornerShape(16.dp))
                         .clickable(role = Role.Button) { fb.tick(); onChest() }
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -124,7 +124,7 @@ fun AchievementsScreen(store: ProfileStore, wallet: Wallet, look: Look, onBack: 
                     Canvas(Modifier.size(72.dp, 60.dp)) { drawChest(if (chest.ready) 0f else 1f, 0f, chest.ready && Chest.isBigDay(chest.streak), 0f) }
                     Spacer(Modifier.width(10.dp))
                     Column {
-                        IconText(if (chest.ready) "Daily chest ready!" else "Chest opened today", fontWeight = FontWeight.ExtraBold)
+                        IconText(if (chest.ready) "Daily chest ready!" else "Chest opened today", fontWeight = FontWeight.Bold)
                         StreakDots(chest.alive, today = false)
                     }
                 }
@@ -156,7 +156,7 @@ fun AchievementsScreen(store: ProfileStore, wallet: Wallet, look: Look, onBack: 
         ) {
             IconChip("←", "Back home", onBack)
             Spacer(Modifier.width(8.dp))
-            IconText("🪙 ${fmt(wallet.coins)}   💎 ${fmt(wallet.diamonds)}", fontWeight = FontWeight.ExtraBold, modifier = Modifier.shadow(4.dp, RoundedCornerShape(50)).background(Palette.Cream, RoundedCornerShape(50)).padding(horizontal = 14.dp, vertical = 10.dp))
+            IconText("🪙 ${fmt(wallet.coins)}   💎 ${fmt(wallet.diamonds)}", fontWeight = FontWeight.SemiBold, modifier = Modifier.shadow(2.dp, RoundedCornerShape(12.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow).background(Palette.Surface, RoundedCornerShape(12.dp)).border(1.dp, Palette.Hairline, RoundedCornerShape(12.dp)).padding(horizontal = 14.dp, vertical = 10.dp))
         }
     }
 }
@@ -164,14 +164,14 @@ fun AchievementsScreen(store: ProfileStore, wallet: Wallet, look: Look, onBack: 
 @Composable
 private fun Stat(big: String, small: String, label: String, modifier: Modifier, hot: Boolean = false) {
     Column(
-        modifier.background(if (hot) Color(0xFFFFE2D6) else Palette.Cream, RoundedCornerShape(18.dp)).border(1.dp, Color.White, RoundedCornerShape(18.dp)).padding(10.dp),
+        modifier.background(Palette.Surface, RoundedCornerShape(14.dp)).border(1.dp, if (hot) Palette.Btn.copy(alpha = 0.5f) else Palette.Hairline, RoundedCornerShape(14.dp)).padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(verticalAlignment = Alignment.Bottom) {
-            IconText(big, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, color = if (hot) Palette.BtnDark else Palette.Ink)
-            IconText(small, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft, modifier = Modifier.padding(bottom = 3.dp))
+            IconText(big, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = if (hot) Palette.BtnDark else Palette.Ink)
+            IconText(small, fontSize = 12.sp, fontWeight = FontWeight.Medium, color = Palette.InkSoft, modifier = Modifier.padding(bottom = 3.dp))
         }
-        IconText(label, fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft)
+        IconText(label, fontSize = 11.sp, fontWeight = FontWeight.Medium, color = Palette.InkSoft)
     }
 }
 
@@ -187,9 +187,9 @@ private fun AchCard(s: AchievementState, burstDiamonds: Int?, burstN: Int, onCla
         Column(
             Modifier
                 .fillMaxWidth()
-                .shadow(if (s.claimable > 0) 8.dp else 3.dp, RoundedCornerShape(20.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow)
-                .background(if (s.claimable > 0) Color(0xFFFFF3DD) else Palette.Cream, RoundedCornerShape(20.dp))
-                .border(if (s.claimable > 0) 2.dp else 1.dp, if (s.claimable > 0) Palette.Mustard else Color.White, RoundedCornerShape(20.dp))
+                .shadow(if (s.claimable > 0) 4.dp else 1.dp, RoundedCornerShape(16.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow)
+                .background(Palette.Surface, RoundedCornerShape(16.dp))
+                .border(if (s.claimable > 0) 1.5.dp else 1.dp, if (s.claimable > 0) Palette.Btn.copy(alpha = 0.55f) else Palette.Hairline, RoundedCornerShape(16.dp))
                 .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -202,7 +202,7 @@ private fun AchCard(s: AchievementState, burstDiamonds: Int?, burstN: Int, onCla
                 }
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f)) {
-                    IconText(a.name, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                    IconText(a.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     IconText(if (done) "All three medals. Show-off." else a.goal(shown.at), fontSize = 12.sp, color = Palette.InkSoft)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -228,7 +228,7 @@ private fun AchCard(s: AchievementState, burstDiamonds: Int?, burstN: Int, onCla
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (done) {
-                    IconText("✓ Complete", fontWeight = FontWeight.ExtraBold, color = Color(0xFF2F6B3A), modifier = Modifier.weight(1f))
+                    IconText("✓ Complete", fontWeight = FontWeight.Bold, color = Color(0xFF2F6B3A), modifier = Modifier.weight(1f))
                 } else {
                     Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
                         Box(Modifier.size(10.dp).background(MEDAL_COLORS[Achievements.MEDALS.indexOf(medal)], CircleShape))
@@ -266,7 +266,7 @@ private fun Burst(diamonds: Int, n: Int, modifier: Modifier) {
         IconText(
             "+$diamonds 💎",
             fontSize = 26.sp,
-            fontWeight = FontWeight.ExtraBold,
+            fontWeight = FontWeight.Bold,
             color = Color(0xFF2E7FA8),
             modifier = Modifier.graphicsLayer {
                 translationY = -40f * p.value * density

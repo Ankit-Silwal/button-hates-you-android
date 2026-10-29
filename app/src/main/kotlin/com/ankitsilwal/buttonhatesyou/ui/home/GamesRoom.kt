@@ -164,7 +164,7 @@ private fun SectionHead(text: String, star: Boolean, modifier: Modifier = Modifi
             Canvas(Modifier.size(16.dp)) { starShape(Color(0xFFF2B320), filled = true) }
             Spacer(Modifier.width(6.dp))
         }
-        IconText(text.uppercase(), fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.5.sp, color = Palette.InkSoft)
+        IconText(text.uppercase(), fontSize = 12.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp, color = Palette.InkSoft)
     }
 }
 
@@ -177,7 +177,7 @@ private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, favorite: Boolean
         modifier
             .fillMaxWidth()
             .alpha(if (soon) 0.55f else if (dim) 0.8f else 1f)
-            .clip(RoundedCornerShape(18.dp))
+            .clip(RoundedCornerShape(16.dp))
             .combinedClickable(
                 enabled = !soon,
                 role = Role.Button,
@@ -192,15 +192,15 @@ private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, favorite: Boolean
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(0.75f)
-                .shadow(if (soon) 0.dp else 6.dp, RoundedCornerShape(22.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow),
+                .shadow(if (soon) 0.dp else 3.dp, RoundedCornerShape(14.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow),
         ) {
-            GameArt(g.id, Modifier.fillMaxSize())
+            GameArt(g.id, Modifier.fillMaxSize(), corner = 14.dp)
             if (!soon) StarButton(favorite, onStar, Modifier.align(Alignment.TopEnd).padding(4.dp))
             if (soon) {
                 IconText(
                     "SOON",
                     fontSize = 9.sp,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontWeight = FontWeight.Bold,
                     color = Color(0xFFFFE9B8),
                     modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 6.dp).background(Color(0xFF3B2A20), RoundedCornerShape(50)).padding(horizontal = 7.dp, vertical = 2.dp),
                 )
@@ -210,7 +210,7 @@ private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, favorite: Boolean
             g.name,
             fontSize = 13.sp,
             lineHeight = 15.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.SemiBold,
             color = Palette.Ink,
             textAlign = TextAlign.Center,
             maxLines = 2,

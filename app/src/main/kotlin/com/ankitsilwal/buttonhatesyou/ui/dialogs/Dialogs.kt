@@ -143,7 +143,7 @@ private fun GateMeter(icon: String, v: Float) {
         Spacer(Modifier.width(8.dp))
         Meter(v, needColor(v), Modifier.weight(1f), height = 12.dp)
         Spacer(Modifier.width(8.dp))
-        IconText("${v.toInt()}", fontWeight = FontWeight.ExtraBold)
+        IconText("${v.toInt()}", fontWeight = FontWeight.Bold)
     }
 }
 
@@ -181,7 +181,7 @@ fun StreakDots(streak: Int, today: Boolean) {
             )
         }
         Spacer(Modifier.width(6.dp))
-        IconText("🔥 $streak", fontWeight = FontWeight.ExtraBold)
+        IconText("🔥 $streak", fontWeight = FontWeight.Bold)
     }
 }
 
@@ -261,7 +261,7 @@ fun ChestDialog(store: ProfileStore, wallet: Wallet, onClose: () -> Unit) {
 
     val big = loot?.loot?.big ?: Chest.isBigDay(chest.streak)
     PopCard(onClose) {
-        IconText(if (big) "DAY 7: THE BIG CHEST" else "DAILY CHEST", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, color = Palette.InkSoft)
+        IconText(if (big) "DAY 7: THE BIG CHEST" else "DAILY CHEST", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft)
         Box(
             Modifier
                 .size(200.dp, 170.dp)
@@ -360,7 +360,7 @@ fun SettingsDialog(settings: AppSettings, onReset: () -> Unit, onClose: () -> Un
             onDismissRequest = { confirm = false },
             title = { IconText("Reset everything?") },
             text = { IconText("Coins, diamonds, clothes, furniture, food and achievements all go. He will not remember you. He will be thrilled.") },
-            confirmButton = { TextButton({ confirm = false; onReset() }) { IconText("Reset", color = Palette.Alert, fontWeight = FontWeight.ExtraBold) } },
+            confirmButton = { TextButton({ confirm = false; onReset() }) { IconText("Reset", color = Palette.Alert, fontWeight = FontWeight.Bold) } },
             dismissButton = { TextButton({ confirm = false }) { IconText("Keep my stuff") } },
             containerColor = Palette.Cream,
         )

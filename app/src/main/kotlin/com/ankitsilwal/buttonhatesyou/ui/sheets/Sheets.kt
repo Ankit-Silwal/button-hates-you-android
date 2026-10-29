@@ -110,20 +110,20 @@ fun ShopTile(name: String, cost: String, on: Boolean, trying: Boolean, enabled: 
     Box(
         Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(18.dp))
-            .background(if (trying) Color(0xFFFFF0CC) else Color.White)
-            .border(if (trying) 2.5.dp else 1.dp, if (trying) Palette.Mustard else Color(0xFFEADBC6), RoundedCornerShape(18.dp))
+            .clip(RoundedCornerShape(14.dp))
+            .background(if (trying) Palette.Btn.copy(alpha = 0.06f) else Palette.SurfaceMuted.copy(alpha = 0.55f))
+            .border(if (trying) 1.5.dp else 1.dp, if (trying) Palette.Btn.copy(alpha = 0.7f) else Palette.Hairline, RoundedCornerShape(14.dp))
             .clickable(enabled = enabled, role = Role.Button, onClickLabel = name) { fb.tick(); onClick() }
             .padding(6.dp),
     ) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(Modifier.fillMaxWidth().height(70.dp), contentAlignment = Alignment.Center, content = art)
-            IconText(name, fontSize = 12.sp, lineHeight = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.heightIn(min = 28.dp))
-            IconText(cost, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, color = if (on) Color(0xFF2F6B3A) else Palette.InkSoft, maxLines = 1)
+            IconText(name, fontSize = 12.sp, lineHeight = 14.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.heightIn(min = 28.dp))
+            IconText(cost, fontSize = 11.sp, fontWeight = FontWeight.Medium, color = if (on) Palette.Good else Palette.InkSoft, maxLines = 1)
         }
         if (on) {
-            Box(Modifier.align(Alignment.TopEnd).size(22.dp).background(Color(0xFF5FA86B), CircleShape), contentAlignment = Alignment.Center) {
-                IconText("✓", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+            Box(Modifier.align(Alignment.TopEnd).size(18.dp).background(Palette.Good, CircleShape), contentAlignment = Alignment.Center) {
+                IconText("✓", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
             }
         }
     }

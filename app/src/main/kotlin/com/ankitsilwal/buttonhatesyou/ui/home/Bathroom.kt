@@ -376,7 +376,7 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
                 ) {
                     AppIcon("🫧", 16.dp)
                     Meter(lathered * 100f, Color(0xFF6FC3DD), Modifier.weight(1f), height = 9.dp)
-                    IconText("${(100 - needs.dirt).roundToInt()}% clean", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+                    IconText("${(100 - needs.dirt).roundToInt()}% clean", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
             IconText(note, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Palette.Ink, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))

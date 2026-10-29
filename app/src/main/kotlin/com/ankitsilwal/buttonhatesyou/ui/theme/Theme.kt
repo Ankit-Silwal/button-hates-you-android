@@ -37,6 +37,21 @@ object Palette {
     val Night = Color(0xFF262A52)
     val NightInk = Color(0xFFF1ECFF)
     val Diamond = Color(0xFF4FB6E8)
+
+    // UI surfaces: a calmer, flatter layer over the illustrated rooms.
+    val Surface = Color(0xFFFFFDF9)
+    val SurfaceMuted = Color(0xFFF3ECE2)
+    val Hairline = Color(0x1A4A3428)
+    val Good = Color(0xFF4E9F6B)
+    val Warn = Color(0xFFE0A63A)
+    val Bad = Color(0xFFD9483B)
+}
+
+// Corner radii shared by the UI layer.
+object Radius {
+    val Control = 14.dp
+    val Card = 18.dp
+    val Sheet = 22.dp
 }
 
 private val Scheme = lightColorScheme(
@@ -61,31 +76,31 @@ private val Scheme = lightColorScheme(
     error = Palette.Alert,
 )
 
-// A rounded, chunky feel: the system sans in heavier weights.
-private val Rounded = FontFamily.SansSerif
-private fun style(size: Int, weight: FontWeight, line: Int = (size * 1.3f).toInt()) =
-    TextStyle(fontFamily = Rounded, fontSize = size.sp, fontWeight = weight, lineHeight = line.sp, color = Palette.Ink)
+// The system sans in measured weights: bold for headings, medium for text.
+private val Sans = FontFamily.SansSerif
+private fun style(size: Int, weight: FontWeight, line: Int = (size * 1.35f).toInt(), tracking: Float = 0f) =
+    TextStyle(fontFamily = Sans, fontSize = size.sp, fontWeight = weight, lineHeight = line.sp, letterSpacing = tracking.sp, color = Palette.Ink)
 
 private val Type = Typography(
-    displaySmall = style(32, FontWeight.ExtraBold),
-    headlineMedium = style(26, FontWeight.ExtraBold),
-    headlineSmall = style(22, FontWeight.Bold),
-    titleLarge = style(20, FontWeight.Bold),
-    titleMedium = style(16, FontWeight.Bold),
-    titleSmall = style(14, FontWeight.Bold),
-    bodyLarge = style(16, FontWeight.Medium),
-    bodyMedium = style(14, FontWeight.Medium),
-    bodySmall = style(12, FontWeight.Medium),
-    labelLarge = style(15, FontWeight.Bold),
-    labelMedium = style(12, FontWeight.Bold),
-    labelSmall = style(11, FontWeight.Bold),
+    displaySmall = style(32, FontWeight.Bold, tracking = -0.5f),
+    headlineMedium = style(26, FontWeight.Bold, tracking = -0.3f),
+    headlineSmall = style(22, FontWeight.SemiBold, tracking = -0.2f),
+    titleLarge = style(19, FontWeight.SemiBold, tracking = -0.1f),
+    titleMedium = style(16, FontWeight.SemiBold),
+    titleSmall = style(14, FontWeight.SemiBold),
+    bodyLarge = style(16, FontWeight.Normal),
+    bodyMedium = style(14, FontWeight.Normal),
+    bodySmall = style(12, FontWeight.Normal),
+    labelLarge = style(15, FontWeight.SemiBold),
+    labelMedium = style(12, FontWeight.Medium, tracking = 0.2f),
+    labelSmall = style(11, FontWeight.Medium, tracking = 0.3f),
 )
 
 private val ShapeSet = Shapes(
-    small = RoundedCornerShape(12.dp),
-    medium = RoundedCornerShape(18.dp),
-    large = RoundedCornerShape(24.dp),
-    extraLarge = RoundedCornerShape(28.dp),
+    small = RoundedCornerShape(10.dp),
+    medium = RoundedCornerShape(Radius.Control),
+    large = RoundedCornerShape(Radius.Card),
+    extraLarge = RoundedCornerShape(Radius.Sheet),
 )
 
 /** True when the system's "remove animations" is on. */

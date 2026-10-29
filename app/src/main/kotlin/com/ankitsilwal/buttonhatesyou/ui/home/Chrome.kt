@@ -99,20 +99,22 @@ fun TopBar(
     }
 }
 
+private val ChipShape = RoundedCornerShape(12.dp)
+
 @Composable
 private fun frosted(): Modifier = Modifier
-    .shadow(4.dp, RoundedCornerShape(50), ambientColor = Palette.Shadow, spotColor = Palette.Shadow)
-    .background(Palette.Cream.copy(alpha = 0.92f), RoundedCornerShape(50))
-    .border(1.dp, Color.White, RoundedCornerShape(50))
+    .shadow(2.dp, ChipShape, ambientColor = Palette.Shadow, spotColor = Palette.Shadow)
+    .background(Palette.Surface.copy(alpha = 0.94f), ChipShape)
+    .border(1.dp, Palette.Hairline, ChipShape)
 
 @Composable
 private fun WalletChip(coins: Int, diamonds: Int) {
     Column(
-        frosted().heightIn(min = 44.dp).padding(horizontal = 10.dp, vertical = 3.dp).semantics { contentDescription = "$coins coins, $diamonds diamonds" },
+        frosted().heightIn(min = 40.dp).padding(horizontal = 10.dp, vertical = 4.dp).semantics { contentDescription = "$coins coins, $diamonds diamonds" },
         verticalArrangement = Arrangement.Center,
     ) {
-        IconText("🪙 ${fmt(coins)}", fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 17.sp, maxLines = 1, overflow = TextOverflow.Clip)
-        IconText("💎 ${fmt(diamonds)}", fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 17.sp, color = Color(0xFF2E7FA8), maxLines = 1)
+        IconText("🪙 ${fmt(coins)}", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, lineHeight = 17.sp, maxLines = 1, overflow = TextOverflow.Clip)
+        IconText("💎 ${fmt(diamonds)}", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, lineHeight = 17.sp, color = Palette.InkSoft, maxLines = 1)
     }
 }
 
@@ -125,11 +127,11 @@ private fun NeedsChip(n: NeedsState, onClick: () -> Unit) {
     val label = if (n.asleep) "Asleep. Hunger ${h.toInt()}, clean ${clean.toInt()}" else "Hunger ${h.toInt()}, energy ${e.toInt()}, clean ${clean.toInt()}"
     Column(
         frosted()
-            .clip(RoundedCornerShape(50))
+            .clip(ChipShape)
             .clickable(role = Role.Button, onClickLabel = "Open the room that helps") { fb.tick(); onClick() }
             .semantics { contentDescription = label }
             .heightIn(min = 48.dp)
-            .width(92.dp)
+            .width(88.dp)
             .padding(horizontal = 10.dp, vertical = 5.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
     ) {
@@ -142,9 +144,9 @@ private fun NeedsChip(n: NeedsState, onClick: () -> Unit) {
 @Composable
 private fun NeedLine(icon: String, v: Float) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        AppIcon(icon, 11.dp)
-        Spacer(Modifier.width(3.dp))
-        Meter(v, needColor(v), Modifier.weight(1f), height = 6.dp)
+        AppIcon(icon, 11.dp, tint = Palette.InkSoft)
+        Spacer(Modifier.width(5.dp))
+        Meter(v, needColor(v), Modifier.weight(1f), height = 4.dp)
     }
 }
 
@@ -156,49 +158,51 @@ fun Dock(current: Int, needs: NeedsState, onGo: (Page) -> Unit, modifier: Modifi
             .padding(horizontal = 10.dp, vertical = 8.dp)
             .fillMaxWidth()
             .height(DOCK_H)
-            .shadow(12.dp, RoundedCornerShape(24.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow)
-            .background(Palette.Cream.copy(alpha = 0.96f), RoundedCornerShape(24.dp))
-            .border(1.dp, Color.White, RoundedCornerShape(24.dp))
-            .padding(4.dp),
+            .shadow(8.dp, RoundedCornerShape(20.dp), ambientColor = Palette.Shadow, spotColor = Palette.Shadow)
+            .background(Palette.Surface.copy(alpha = 0.97f), RoundedCornerShape(20.dp))
+            .border(1.dp, Palette.Hairline, RoundedCornerShape(20.dp))
+            .padding(horizontal = 4.dp, vertical = 6.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Page.entries.forEachIndexed { i, p -> DockButton(p, i == current, alertOf(p, needs), Modifier.weight(1f)) { onGo(p) } }
     }
 }
 
+// A Material-style tab: a soft indicator behind the icon, the label beneath.
 @Composable
 private fun DockButton(p: Page, on: Boolean, alert: Boolean, modifier: Modifier, onClick: () -> Unit) {
     val fb = LocalFeedback.current
-    val bg by animateColorAsState(if (on) Palette.Mustard.copy(alpha = 0.55f) else Color.Transparent, label = "dock")
-    val lift by animateFloatAsState(if (on) 1f else 0f, spring(dampingRatio = 0.5f, stiffness = Spring.StiffnessMedium), label = "lift")
+    val indicator by animateColorAsState(if (on) Palette.Btn.copy(alpha = 0.12f) else Color.Transparent, label = "dock")
+    val tint by animateColorAsState(if (on) Palette.BtnDark else Palette.InkSoft, label = "dockTint")
     Box(
         modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(bg)
+            .clip(RoundedCornerShape(14.dp))
             .clickable(role = Role.Tab, onClickLabel = p.title) { fb.tick(); onClick() }
             .semantics { contentDescription = p.title + if (alert) ", needs attention" else "" },
         contentAlignment = Alignment.Center,
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            AppIcon(p.icon, 24.dp, tint = if (on) null else Palette.InkSoft, modifier = Modifier.graphicsLayer { translationY = -lift * 2.dp.toPx(); scaleX = 1f + 0.12f * lift; scaleY = 1f + 0.12f * lift })
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Box(Modifier.size(48.dp, 28.dp).background(indicator, RoundedCornerShape(50)), contentAlignment = Alignment.Center) {
+                AppIcon(p.icon, 20.dp, tint = tint)
+                if (alert) {
+                    Box(
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(top = 2.dp, end = 8.dp)
+                            .size(8.dp)
+                            .background(Palette.Bad, CircleShape)
+                            .border(1.5.dp, Palette.Surface, CircleShape),
+                    )
+                }
+            }
             IconText(
                 p.title.replace("Living Room", "Living"),
-                fontSize = 10.sp,
-                lineHeight = 12.sp,
-                fontWeight = if (on) FontWeight.ExtraBold else FontWeight.SemiBold,
+                fontSize = 11.sp,
+                lineHeight = 13.sp,
+                fontWeight = if (on) FontWeight.SemiBold else FontWeight.Medium,
                 color = if (on) Palette.Ink else Palette.InkSoft,
                 maxLines = 1,
-            )
-        }
-        if (alert) {
-            Box(
-                Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(top = 6.dp, end = 10.dp)
-                    .size(10.dp)
-                    .background(Palette.Alert, CircleShape)
-                    .border(1.5.dp, Color.White, CircleShape),
             )
         }
     }
