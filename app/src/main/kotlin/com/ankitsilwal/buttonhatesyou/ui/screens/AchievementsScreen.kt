@@ -63,6 +63,10 @@ import com.ankitsilwal.buttonhatesyou.ui.dialogs.drawChest
 import com.ankitsilwal.buttonhatesyou.ui.theme.Palette
 import kotlin.math.cos
 import kotlin.math.sin
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
+import com.ankitsilwal.buttonhatesyou.ui.art.iconColor
+import com.ankitsilwal.buttonhatesyou.ui.art.AppIcon
+import com.ankitsilwal.buttonhatesyou.ui.art.GameIconTile
 
 private val MEDAL_COLORS = listOf(Color(0xFFCD8B4E), Color(0xFFB9C2CC), Color(0xFFF2C14E))
 private val LEVELS = Achievements.ACHIEVEMENTS.sumOf { it.levels.size }
@@ -94,8 +98,8 @@ fun AchievementsScreen(store: ProfileStore, wallet: Wallet, look: Look, onBack: 
                     }
                     Spacer(Modifier.width(8.dp))
                     Column {
-                        Text("Achievements", style = MaterialTheme.typography.headlineMedium)
-                        Text("Diamonds don't grow on trees. They grow on achievements. Hit a goal, then claim its medal for 💎.", fontSize = 13.sp, color = Palette.InkSoft)
+                        IconText("Achievements", style = MaterialTheme.typography.headlineMedium)
+                        IconText("Diamonds don't grow on trees. They grow on achievements. Hit a goal, then claim its medal for 💎.", fontSize = 13.sp, color = Palette.InkSoft)
                     }
                 }
             }
@@ -120,7 +124,7 @@ fun AchievementsScreen(store: ProfileStore, wallet: Wallet, look: Look, onBack: 
                     Canvas(Modifier.size(72.dp, 60.dp)) { drawChest(if (chest.ready) 0f else 1f, 0f, chest.ready && Chest.isBigDay(chest.streak), 0f) }
                     Spacer(Modifier.width(10.dp))
                     Column {
-                        Text(if (chest.ready) "Daily chest ready!" else "Chest opened today", fontWeight = FontWeight.ExtraBold)
+                        IconText(if (chest.ready) "Daily chest ready!" else "Chest opened today", fontWeight = FontWeight.ExtraBold)
                         StreakDots(chest.alive, today = false)
                     }
                 }
@@ -128,8 +132,8 @@ fun AchievementsScreen(store: ProfileStore, wallet: Wallet, look: Look, onBack: 
             for (cat in Achievements.CATEGORIES) {
                 item(key = "cat-${cat.id}") {
                     Column(Modifier.padding(top = 8.dp)) {
-                        Text(cat.name, style = MaterialTheme.typography.titleLarge)
-                        Text(cat.blurb, fontSize = 13.sp, color = Palette.InkSoft)
+                        IconText(cat.name, style = MaterialTheme.typography.titleLarge)
+                        IconText(cat.blurb, fontSize = 13.sp, color = Palette.InkSoft)
                     }
                 }
                 items(states.filter { it.a.cat == cat.id }, key = { it.a.id }) { s ->
@@ -152,7 +156,7 @@ fun AchievementsScreen(store: ProfileStore, wallet: Wallet, look: Look, onBack: 
         ) {
             IconChip("←", "Back home", onBack)
             Spacer(Modifier.width(8.dp))
-            Text("🪙 ${fmt(wallet.coins)}   💎 ${fmt(wallet.diamonds)}", fontWeight = FontWeight.ExtraBold, modifier = Modifier.shadow(4.dp, RoundedCornerShape(50)).background(Palette.Cream, RoundedCornerShape(50)).padding(horizontal = 14.dp, vertical = 10.dp))
+            IconText("🪙 ${fmt(wallet.coins)}   💎 ${fmt(wallet.diamonds)}", fontWeight = FontWeight.ExtraBold, modifier = Modifier.shadow(4.dp, RoundedCornerShape(50)).background(Palette.Cream, RoundedCornerShape(50)).padding(horizontal = 14.dp, vertical = 10.dp))
         }
     }
 }
@@ -164,10 +168,10 @@ private fun Stat(big: String, small: String, label: String, modifier: Modifier, 
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(verticalAlignment = Alignment.Bottom) {
-            Text(big, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, color = if (hot) Palette.BtnDark else Palette.Ink)
-            Text(small, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft, modifier = Modifier.padding(bottom = 3.dp))
+            IconText(big, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold, color = if (hot) Palette.BtnDark else Palette.Ink)
+            IconText(small, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft, modifier = Modifier.padding(bottom = 3.dp))
         }
-        Text(label, fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft)
+        IconText(label, fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft)
     }
 }
 
@@ -190,11 +194,16 @@ private fun AchCard(s: AchievementState, burstDiamonds: Int?, burstN: Int, onCla
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(a.icon, fontSize = 28.sp)
+                // a game's medal wears the game's icon; the rest their own, on a soft badge
+                val game = a.game
+                if (game != null) GameIconTile(game, Modifier.size(44.dp), corner = 14.dp)
+                else Box(Modifier.size(44.dp).background(iconColor(a.icon).copy(alpha = 0.14f), RoundedCornerShape(14.dp)), contentAlignment = Alignment.Center) {
+                    AppIcon(a.icon, 26.dp)
+                }
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f)) {
-                    Text(a.name, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
-                    Text(if (done) "All three medals. Show-off." else a.goal(shown.at), fontSize = 12.sp, color = Palette.InkSoft)
+                    IconText(a.name, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                    IconText(if (done) "All three medals. Show-off." else a.goal(shown.at), fontSize = 12.sp, color = Palette.InkSoft)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     for (i in Achievements.MEDALS.indices) {
@@ -207,7 +216,7 @@ private fun AchCard(s: AchievementState, burstDiamonds: Int?, burstN: Int, onCla
                                 .border(if (ready) 2.dp else 0.dp, if (ready) MEDAL_COLORS[i] else Color.Transparent, CircleShape),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Text("★", fontSize = 13.sp, color = if (got) Color.White else Color(0x55000000))
+                            IconText("★", fontSize = 13.sp, color = if (got) Color.White else Color(0x55000000))
                         }
                     }
                 }
@@ -215,16 +224,16 @@ private fun AchCard(s: AchievementState, burstDiamonds: Int?, burstN: Int, onCla
             Row(verticalAlignment = Alignment.CenterVertically) {
                 com.ankitsilwal.buttonhatesyou.ui.common.Meter(pct * 100f, if (done) Color(0xFF7CC08A) else Palette.Mustard, Modifier.weight(1f), height = 10.dp)
                 Spacer(Modifier.width(8.dp))
-                Text("${fmt(minOf(s.value, shown.at))} / ${fmt(shown.at)}", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft)
+                IconText("${fmt(minOf(s.value, shown.at))} / ${fmt(shown.at)}", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft)
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (done) {
-                    Text("✓ Complete", fontWeight = FontWeight.ExtraBold, color = Color(0xFF2F6B3A), modifier = Modifier.weight(1f))
+                    IconText("✓ Complete", fontWeight = FontWeight.ExtraBold, color = Color(0xFF2F6B3A), modifier = Modifier.weight(1f))
                 } else {
                     Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
                         Box(Modifier.size(10.dp).background(MEDAL_COLORS[Achievements.MEDALS.indexOf(medal)], CircleShape))
                         Spacer(Modifier.width(6.dp))
-                        Text("${medal.name} · +${s.next!!.diamonds} 💎", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        IconText("${medal.name} · +${s.next!!.diamonds} 💎", fontSize = 13.sp, fontWeight = FontWeight.Bold)
                     }
                 }
                 if (s.claimable > 0) Pill("Claim", onClaim, height = 46.dp)
@@ -243,7 +252,7 @@ private fun Burst(diamonds: Int, n: Int, modifier: Modifier) {
         for (i in 0 until 10) {
             val ang = Math.toRadians(i * 36.0)
             val d = (60 + (i % 3) * 18) * p.value
-            Text(
+            IconText(
                 if (i % 2 == 1) "💎" else "✦",
                 fontSize = 16.sp,
                 color = Palette.Mustard,
@@ -254,7 +263,7 @@ private fun Burst(diamonds: Int, n: Int, modifier: Modifier) {
                 },
             )
         }
-        Text(
+        IconText(
             "+$diamonds 💎",
             fontSize = 26.sp,
             fontWeight = FontWeight.ExtraBold,

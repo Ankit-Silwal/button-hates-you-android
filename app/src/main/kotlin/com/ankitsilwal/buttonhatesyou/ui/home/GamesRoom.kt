@@ -68,6 +68,7 @@ import com.ankitsilwal.buttonhatesyou.ui.common.LocalFeedback
 import com.ankitsilwal.buttonhatesyou.ui.common.Pill
 import com.ankitsilwal.buttonhatesyou.ui.common.PillKind
 import com.ankitsilwal.buttonhatesyou.ui.theme.Palette
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
 
 /** Please Don't first (the original game), then the adventure games in menu order: the ones the arcade has, then the ones still coming. */
 fun gameList(): List<GameInfo> {
@@ -117,8 +118,8 @@ fun GamesRoom(env: RoomEnv) {
                     }
                     Spacer(Modifier.width(10.dp))
                     Column(Modifier.weight(1f)) {
-                        Text("Games", style = MaterialTheme.typography.headlineMedium)
-                        Text(note, style = MaterialTheme.typography.bodyMedium, color = Palette.InkSoft)
+                        IconText("Games", style = MaterialTheme.typography.headlineMedium)
+                        IconText(note, style = MaterialTheme.typography.bodyMedium, color = Palette.InkSoft)
                         if (blocked) {
                             Row(Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 if (hungry && !needs.asleep) Pill("Kitchen", { env.go(Page.Kitchen) }, icon = "🍳", height = 48.dp)
@@ -140,7 +141,7 @@ fun GamesRoom(env: RoomEnv) {
                 }
             } else {
                 item(key = "tip", span = { GridItemSpan(maxLineSpan) }) {
-                    Text(
+                    IconText(
                         "Tap the star on a game (or hold it) to pin it to the top.",
                         fontSize = 12.sp,
                         color = Palette.InkSoft,
@@ -163,7 +164,7 @@ private fun SectionHead(text: String, star: Boolean, modifier: Modifier = Modifi
             Canvas(Modifier.size(16.dp)) { starShape(Color(0xFFF2B320), filled = true) }
             Spacer(Modifier.width(6.dp))
         }
-        Text(text.uppercase(), fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.5.sp, color = Palette.InkSoft)
+        IconText(text.uppercase(), fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.5.sp, color = Palette.InkSoft)
     }
 }
 
@@ -196,7 +197,7 @@ private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, favorite: Boolean
             GameArt(g.id, Modifier.fillMaxSize())
             if (!soon) StarButton(favorite, onStar, Modifier.align(Alignment.TopEnd).padding(4.dp))
             if (soon) {
-                Text(
+                IconText(
                     "SOON",
                     fontSize = 9.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -205,7 +206,7 @@ private fun GameTile(g: GameInfo, soon: Boolean, dim: Boolean, favorite: Boolean
                 )
             }
         }
-        Text(
+        IconText(
             g.name,
             fontSize = 13.sp,
             lineHeight = 15.sp,

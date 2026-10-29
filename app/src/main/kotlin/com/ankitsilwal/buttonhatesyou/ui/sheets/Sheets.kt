@@ -67,6 +67,8 @@ import com.ankitsilwal.buttonhatesyou.ui.theme.Palette
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.ankitsilwal.buttonhatesyou.ui.art.AppIcon
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
 
 /* ------------------------------ shared bits ------------------------------ */
 
@@ -91,7 +93,7 @@ class Said {
 
 @Composable
 private fun SaidLine(text: String, fallback: String) {
-    Text(
+    IconText(
         text.ifBlank { fallback },
         fontSize = 13.sp,
         fontWeight = FontWeight.SemiBold,
@@ -116,12 +118,12 @@ fun ShopTile(name: String, cost: String, on: Boolean, trying: Boolean, enabled: 
     ) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(Modifier.fillMaxWidth().height(70.dp), contentAlignment = Alignment.Center, content = art)
-            Text(name, fontSize = 12.sp, lineHeight = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.heightIn(min = 28.dp))
-            Text(cost, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, color = if (on) Color(0xFF2F6B3A) else Palette.InkSoft, maxLines = 1)
+            IconText(name, fontSize = 12.sp, lineHeight = 14.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.heightIn(min = 28.dp))
+            IconText(cost, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, color = if (on) Color(0xFF2F6B3A) else Palette.InkSoft, maxLines = 1)
         }
         if (on) {
             Box(Modifier.align(Alignment.TopEnd).size(22.dp).background(Color(0xFF5FA86B), CircleShape), contentAlignment = Alignment.Center) {
-                Text("✓", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+                IconText("✓", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
             }
         }
     }
@@ -319,7 +321,7 @@ fun DecorSheet(room: String, wallet: Wallet, store: ProfileStore, onPreview: (De
                                 val s = spots[i]
                                 val on = s == spot
                                 val swap = cur.place[s] != null && cur.place[s] != item.id
-                                Text(
+                                IconText(
                                     (House.SPOT[s]?.name ?: s) + if (swap) " (swap)" else "",
                                     fontSize = 13.sp,
                                     fontWeight = FontWeight.Bold,
@@ -386,7 +388,7 @@ fun BuyFoodSheet(wallet: Wallet, store: ProfileStore) {
                     },
                 ) {
                     Canvas(Modifier.size(54.dp).align(Alignment.TopCenter)) { HouseArt.draw(this, f.id, Rect(0f, 0f, size.width, size.height), 0f) }
-                    Text(fx, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft, modifier = Modifier.align(Alignment.BottomCenter))
+                    IconText(fx, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft, modifier = Modifier.align(Alignment.BottomCenter))
                 }
             }
         }
@@ -427,7 +429,7 @@ fun WakeSheet(wallet: Wallet, needs: NeedsState, store: ProfileStore, onSay: (St
                         }
                     },
                 ) {
-                    Text(o.icon, fontSize = 38.sp)
+                    AppIcon(o.icon, 44.dp)
                 }
             }
         }

@@ -46,6 +46,8 @@ import com.ankitsilwal.buttonhatesyou.ui.common.needColor
 import com.ankitsilwal.buttonhatesyou.ui.theme.Palette
 import kotlin.math.min
 import kotlin.math.roundToInt
+import com.ankitsilwal.buttonhatesyou.ui.art.AppIcon
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
 
 val TOP_BAR_H = 58.dp
 val DOCK_H = 64.dp
@@ -109,8 +111,8 @@ private fun WalletChip(coins: Int, diamonds: Int) {
         frosted().heightIn(min = 44.dp).padding(horizontal = 10.dp, vertical = 3.dp).semantics { contentDescription = "$coins coins, $diamonds diamonds" },
         verticalArrangement = Arrangement.Center,
     ) {
-        Text("🪙 ${fmt(coins)}", fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 17.sp, maxLines = 1, overflow = TextOverflow.Clip)
-        Text("💎 ${fmt(diamonds)}", fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 17.sp, color = Color(0xFF2E7FA8), maxLines = 1)
+        IconText("🪙 ${fmt(coins)}", fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 17.sp, maxLines = 1, overflow = TextOverflow.Clip)
+        IconText("💎 ${fmt(diamonds)}", fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 17.sp, color = Color(0xFF2E7FA8), maxLines = 1)
     }
 }
 
@@ -140,7 +142,7 @@ private fun NeedsChip(n: NeedsState, onClick: () -> Unit) {
 @Composable
 private fun NeedLine(icon: String, v: Float) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(icon, fontSize = 9.sp, lineHeight = 11.sp)
+        AppIcon(icon, 11.dp)
         Spacer(Modifier.width(3.dp))
         Meter(v, needColor(v), Modifier.weight(1f), height = 6.dp)
     }
@@ -179,8 +181,8 @@ private fun DockButton(p: Page, on: Boolean, alert: Boolean, modifier: Modifier,
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(p.icon, fontSize = 22.sp, modifier = Modifier.graphicsLayer { translationY = -lift * 2.dp.toPx(); scaleX = 1f + 0.12f * lift; scaleY = 1f + 0.12f * lift })
-            Text(
+            AppIcon(p.icon, 24.dp, tint = if (on) null else Palette.InkSoft, modifier = Modifier.graphicsLayer { translationY = -lift * 2.dp.toPx(); scaleX = 1f + 0.12f * lift; scaleY = 1f + 0.12f * lift })
+            IconText(
                 p.title.replace("Living Room", "Living"),
                 fontSize = 10.sp,
                 lineHeight = 12.sp,

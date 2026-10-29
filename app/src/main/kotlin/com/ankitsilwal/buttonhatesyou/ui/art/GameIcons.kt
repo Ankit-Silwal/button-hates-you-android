@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
@@ -56,7 +56,8 @@ fun GameIconTile(id: String, modifier: Modifier = Modifier, corner: Dp = 22.dp) 
             .background(Brush.verticalGradient(listOf(lerp(tint, Color.White, 0.14f), tint, lerp(tint, Color.Black, 0.12f))))
             .border(1.dp, Color.White.copy(alpha = 0.35f), shape),
     ) {
-        Canvas(Modifier.fillMaxSize().padding(corner * 0.9f)) { gameIcon(id) }
+        // the icon fills the middle ~56% at any tile size
+        Canvas(Modifier.fillMaxSize()) { inset(size.minDimension * 0.22f) { gameIcon(id) } }
     }
 }
 

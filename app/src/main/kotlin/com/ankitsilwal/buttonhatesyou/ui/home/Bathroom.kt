@@ -62,6 +62,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.hypot
 import kotlin.math.roundToInt
+import com.ankitsilwal.buttonhatesyou.ui.art.AppIcon
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
 
 private const val SHOWER_MS = 2800L
 private const val SCRUB_DP = 1500f // rubbing this far covers him in lather
@@ -372,12 +374,12 @@ fun BathRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
-                    Text("🫧", fontSize = 14.sp)
+                    AppIcon("🫧", 16.dp)
                     Meter(lathered * 100f, Color(0xFF6FC3DD), Modifier.weight(1f), height = 9.dp)
-                    Text("${(100 - needs.dirt).roundToInt()}% clean", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+                    IconText("${(100 - needs.dirt).roundToInt()}% clean", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
                 }
             }
-            Text(note, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Palette.Ink, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
+            IconText(note, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Palette.Ink, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp))
             PillRow {
                 Pill("Scrub", { if (needs.asleep) refuseSoap() else scrubTap() }, icon = "🧼", kind = PillKind.Alt, index = 0, modifier = Modifier.weight(1f))
                 Pill("Shower", ::startShower, icon = "🚿", enabled = phase == Phase.Lather && !needs.asleep, index = 1, modifier = Modifier.weight(1.2f))
@@ -393,5 +395,5 @@ private fun Step(text: String, on: Boolean, done: Boolean) {
         done -> Color(0xFFBFE5C3) to Color(0xFF2F6B3A)
         else -> Palette.Cream.copy(alpha = 0.8f) to Palette.InkSoft
     }
-    Text(text, color = fg, fontSize = 12.sp, fontWeight = FontWeight.Bold, modifier = Modifier.background(bg, RoundedCornerShape(50)).padding(horizontal = 10.dp, vertical = 6.dp))
+    IconText(text, color = fg, fontSize = 12.sp, fontWeight = FontWeight.Bold, modifier = Modifier.background(bg, RoundedCornerShape(50)).padding(horizontal = 10.dp, vertical = 6.dp))
 }

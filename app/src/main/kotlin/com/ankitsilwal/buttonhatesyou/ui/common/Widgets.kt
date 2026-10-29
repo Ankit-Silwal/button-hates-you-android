@@ -56,6 +56,8 @@ import com.ankitsilwal.buttonhatesyou.ui.theme.LocalReduceMotion
 import com.ankitsilwal.buttonhatesyou.ui.theme.Palette
 import java.text.NumberFormat
 import java.util.Locale
+import com.ankitsilwal.buttonhatesyou.ui.art.AppIcon
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
 
 fun fmt(n: Int): String = NumberFormat.getIntegerInstance(Locale.US).format(n)
 
@@ -133,10 +135,10 @@ fun Pill(
     ) {
         Row(Modifier.height(height - rim), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
             if (icon != null) {
-                Text(icon, fontSize = 18.sp)
+                AppIcon(icon, 20.dp, tint = kind.fg)
                 Spacer(Modifier.width(6.dp))
             }
-            Text(text, color = kind.fg, fontWeight = FontWeight.ExtraBold, fontSize = 15.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            IconText(text, color = kind.fg, fontWeight = FontWeight.ExtraBold, fontSize = 15.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
@@ -168,7 +170,7 @@ fun IconChip(icon: String, label: String, onClick: () -> Unit, badge: String? = 
                 },
             contentAlignment = Alignment.Center,
         ) {
-            Text(icon, fontSize = 20.sp)
+            AppIcon(icon, 24.dp)
         }
         if (badge != null) {
             Box(
@@ -180,7 +182,7 @@ fun IconChip(icon: String, label: String, onClick: () -> Unit, badge: String? = 
                     .padding(horizontal = 4.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(badge, color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
+                IconText(badge, color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
             }
         }
     }
@@ -236,13 +238,13 @@ fun NeedHud(icon: String, label: String, value: Float, note: String?, dark: Bool
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(icon, fontSize = 15.sp)
-            Text(label, color = fg, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            AppIcon(icon, 17.dp)
+            IconText(label, color = fg, fontWeight = FontWeight.Bold, fontSize = 13.sp)
             Meter(value, needColor(value), Modifier.weight(1f), track = if (dark) Color(0x33FFFFFF) else Color(0x22000000), height = 9.dp)
-            Text("${value.toInt()}", color = fg, fontWeight = FontWeight.ExtraBold, fontSize = 13.sp)
+            IconText("${value.toInt()}", color = fg, fontWeight = FontWeight.ExtraBold, fontSize = 13.sp)
         }
         if (!note.isNullOrBlank()) {
-            Text(note, color = if (dark) Color(0xFFD8D4FF) else Palette.InkSoft, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(horizontal = 4.dp), maxLines = 2)
+            IconText(note, color = if (dark) Color(0xFFD8D4FF) else Palette.InkSoft, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(horizontal = 4.dp), maxLines = 2)
         }
     }
 }
@@ -277,7 +279,7 @@ fun SpeechBubble(line: Line, modifier: Modifier = Modifier, dark: Boolean = fals
                 .border(1.dp, Color.White.copy(alpha = if (dark) 0.12f else 0.8f), RoundedCornerShape(20.dp))
                 .padding(horizontal = 18.dp, vertical = 10.dp),
         ) {
-            Text(line.text, color = fg, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 21.sp, textAlign = TextAlign.Center)
+            IconText(line.text, color = fg, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 21.sp, textAlign = TextAlign.Center)
         }
         Box(
             Modifier
@@ -305,7 +307,7 @@ fun PanelSheet(title: String, onClose: () -> Unit, modifier: Modifier = Modifier
             Box(Modifier.size(40.dp, 5.dp).background(Color(0x334A3428), RoundedCornerShape(50)))
         }
         Row(Modifier.fillMaxWidth().padding(start = 18.dp, end = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(title, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+            IconText(title, style = androidx.compose.material3.MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
             Box(
                 Modifier
                     .size(48.dp)
@@ -314,7 +316,7 @@ fun PanelSheet(title: String, onClose: () -> Unit, modifier: Modifier = Modifier
                 contentAlignment = Alignment.Center,
             ) {
                 Box(Modifier.size(34.dp).background(Palette.Wall, CircleShape), contentAlignment = Alignment.Center) {
-                    Text("✕", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Palette.Ink)
+                    IconText("✕", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Palette.Ink)
                 }
             }
         }
@@ -349,7 +351,7 @@ fun ChipTabs(tabs: List<Pair<String, String>>, selected: String, onSelect: (Stri
                         .padding(horizontal = 14.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(label, color = if (on) Palette.Cream else Palette.Ink, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    IconText(label, color = if (on) Palette.Cream else Palette.Ink, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 }
             }
         }
@@ -367,7 +369,7 @@ fun BuyBar(tag: String, name: String, note: String?, modifier: Modifier = Modifi
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
+            IconText(
                 tag.uppercase(),
                 color = Color(0xFFFFE9B8),
                 fontSize = 10.sp,
@@ -375,9 +377,9 @@ fun BuyBar(tag: String, name: String, note: String?, modifier: Modifier = Modifi
                 modifier = Modifier.background(Color(0xFF3B2A20), RoundedCornerShape(50)).padding(horizontal = 8.dp, vertical = 2.dp),
             )
             Spacer(Modifier.width(8.dp))
-            Text(name, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            IconText(name, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        if (!note.isNullOrBlank()) Text(note, fontSize = 12.sp, color = Palette.InkSoft, maxLines = 2)
+        if (!note.isNullOrBlank()) IconText(note, fontSize = 12.sp, color = Palette.InkSoft, maxLines = 2)
         extra?.invoke()
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End), content = buttons)
     }

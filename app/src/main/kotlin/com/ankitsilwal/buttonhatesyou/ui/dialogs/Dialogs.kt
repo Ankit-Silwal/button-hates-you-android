@@ -80,6 +80,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.sin
+import com.ankitsilwal.buttonhatesyou.ui.art.AppIcon
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
 
 /** A cream card that springs in. */
 @Composable
@@ -120,10 +122,10 @@ fun GateDialog(why: String, look: Look, store: ProfileStore, onKitchen: () -> Un
         Box(Modifier.size(120.dp, 130.dp), contentAlignment = Alignment.Center) {
             Avatar(look, Face(mood = if (why == "hungry") Mood.Bored else if (why == "asleep") Mood.Sleep else Mood.Tired, sleepy = why != "hungry"), size = 80.dp, legs = false)
         }
-        Text(line, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
+        IconText(line, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
         GateMeter("⚡", energy)
         GateMeter("🍔", hunger)
-        Text(
+        IconText(
             (if (why == "asleep") "He is in bed. " else "") + "A game needs ${(Needs.PLAY_COST["adventure"] ?: 2.0).toInt()} energy and a tummy that is at least ${Needs.PLAY_MIN_HUNGER.toInt()} full. Food is cheap, naps are free.",
             fontSize = 13.sp, color = Palette.InkSoft, textAlign = TextAlign.Center,
         )
@@ -137,11 +139,11 @@ fun GateDialog(why: String, look: Look, store: ProfileStore, onKitchen: () -> Un
 @Composable
 private fun GateMeter(icon: String, v: Float) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text(icon, fontSize = 16.sp)
+        AppIcon(icon, 18.dp)
         Spacer(Modifier.width(8.dp))
         Meter(v, needColor(v), Modifier.weight(1f), height = 12.dp)
         Spacer(Modifier.width(8.dp))
-        Text("${v.toInt()}", fontWeight = FontWeight.ExtraBold)
+        IconText("${v.toInt()}", fontWeight = FontWeight.ExtraBold)
     }
 }
 
@@ -179,7 +181,7 @@ fun StreakDots(streak: Int, today: Boolean) {
             )
         }
         Spacer(Modifier.width(6.dp))
-        Text("🔥 $streak", fontWeight = FontWeight.ExtraBold)
+        IconText("🔥 $streak", fontWeight = FontWeight.ExtraBold)
     }
 }
 
@@ -259,7 +261,7 @@ fun ChestDialog(store: ProfileStore, wallet: Wallet, onClose: () -> Unit) {
 
     val big = loot?.loot?.big ?: Chest.isBigDay(chest.streak)
     PopCard(onClose) {
-        Text(if (big) "DAY 7: THE BIG CHEST" else "DAILY CHEST", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, color = Palette.InkSoft)
+        IconText(if (big) "DAY 7: THE BIG CHEST" else "DAILY CHEST", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, color = Palette.InkSoft)
         Box(
             Modifier
                 .size(200.dp, 170.dp)
@@ -274,14 +276,14 @@ fun ChestDialog(store: ProfileStore, wallet: Wallet, onClose: () -> Unit) {
         val l = loot
         when {
             phase == ChestPhase.Open && l != null -> {
-                Text(if (l.loot.diamonds > 0) "Ooh, shiny." else if (l.loot.big) "Jackpot. He is furious." else "Free stuff. He hates that.", style = MaterialTheme.typography.headlineSmall)
+                IconText(if (l.loot.diamonds > 0) "Ooh, shiny." else if (l.loot.big) "Jackpot. He is furious." else "Free stuff. He hates that.", style = MaterialTheme.typography.headlineSmall)
                 lootList(l.loot).forEachIndexed { i, it -> LootRow(it, i) }
                 StreakDots(l.streak, today = true)
                 Pill("Nice", onClose)
             }
             chest.ready -> {
-                Text(if (phase == ChestPhase.Shaking) "Opening…" else "Tap the chest", style = MaterialTheme.typography.headlineSmall)
-                Text(
+                IconText(if (phase == ChestPhase.Shaking) "Opening…" else "Tap the chest", style = MaterialTheme.typography.headlineSmall)
+                IconText(
                     (if (chest.streak > 1) "Day ${chest.streak} in a row. " else "") +
                         if (Chest.isBigDay(chest.streak)) "A big one: coins, a fancy snack, energy and a diamond." else "Come back ${Chest.bigEvery} days in a row for a big one.",
                     textAlign = TextAlign.Center, color = Palette.InkSoft,
@@ -289,8 +291,8 @@ fun ChestDialog(store: ProfileStore, wallet: Wallet, onClose: () -> Unit) {
                 StreakDots(chest.alive, today = false)
             }
             else -> {
-                Text("Already opened today", style = MaterialTheme.typography.headlineSmall)
-                Text("The next one is ready in ${untilText(chest.next, now)}.", color = Palette.InkSoft, textAlign = TextAlign.Center)
+                IconText("Already opened today", style = MaterialTheme.typography.headlineSmall)
+                IconText("The next one is ready in ${untilText(chest.next, now)}.", color = Palette.InkSoft, textAlign = TextAlign.Center)
                 StreakDots(chest.alive, today = false)
                 Pill("Close", onClose, kind = PillKind.Ghost)
             }
@@ -307,9 +309,9 @@ private fun FlyingLoot(items: List<LootLine>) {
         all.forEachIndexed { i, it ->
             val a = Math.toRadians((-150.0 + i * 300.0 / max(1, all.size - 1)) - 90.0 + 90.0)
             val d = 90f * p.value
-            Text(
+            AppIcon(
                 it.icon,
-                fontSize = 22.sp,
+                26.dp,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .graphicsLayer {
@@ -334,9 +336,9 @@ private fun LootRow(it: LootLine, i: Int) {
             .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(it.icon, fontSize = 18.sp)
+        AppIcon(it.icon, 22.dp)
         Spacer(Modifier.width(10.dp))
-        Text(it.text, fontWeight = FontWeight.Bold)
+        IconText(it.text, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -346,7 +348,7 @@ private fun LootRow(it: LootLine, i: Int) {
 fun SettingsDialog(settings: AppSettings, onReset: () -> Unit, onClose: () -> Unit) {
     var confirm by remember { mutableStateOf(false) }
     PopCard(onClose) {
-        Text("Settings", style = MaterialTheme.typography.headlineSmall)
+        IconText("Settings", style = MaterialTheme.typography.headlineSmall)
         SettingRow("🔊", "Sound", settings.sound) { settings.changeSound(it) }
         SettingRow("📳", "Vibration", settings.vibration) { settings.changeVibration(it) }
         Spacer(Modifier.height(4.dp))
@@ -356,10 +358,10 @@ fun SettingsDialog(settings: AppSettings, onReset: () -> Unit, onClose: () -> Un
     if (confirm) {
         AlertDialog(
             onDismissRequest = { confirm = false },
-            title = { Text("Reset everything?") },
-            text = { Text("Coins, diamonds, clothes, furniture, food and achievements all go. He will not remember you. He will be thrilled.") },
-            confirmButton = { TextButton({ confirm = false; onReset() }) { Text("Reset", color = Palette.Alert, fontWeight = FontWeight.ExtraBold) } },
-            dismissButton = { TextButton({ confirm = false }) { Text("Keep my stuff") } },
+            title = { IconText("Reset everything?") },
+            text = { IconText("Coins, diamonds, clothes, furniture, food and achievements all go. He will not remember you. He will be thrilled.") },
+            confirmButton = { TextButton({ confirm = false; onReset() }) { IconText("Reset", color = Palette.Alert, fontWeight = FontWeight.ExtraBold) } },
+            dismissButton = { TextButton({ confirm = false }) { IconText("Keep my stuff") } },
             containerColor = Palette.Cream,
         )
     }
@@ -377,9 +379,9 @@ private fun SettingRow(icon: String, label: String, on: Boolean, onChange: (Bool
             .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(icon, fontSize = 20.sp)
+        AppIcon(icon, 24.dp)
         Spacer(Modifier.width(10.dp))
-        Text(label, fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.weight(1f))
+        IconText(label, fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.weight(1f))
         Switch(on, { onChange(it); fb.tick() }, colors = SwitchDefaults.colors(checkedTrackColor = Palette.Btn))
     }
 }

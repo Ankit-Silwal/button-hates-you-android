@@ -59,6 +59,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.max
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
 
 /** A mood that shows for a moment after a line (then his needs decide again). */
 @Composable
@@ -196,7 +197,7 @@ fun KitchenRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
         tray = {
             NeedHud("🍔", "Hunger", needs.hunger.toFloat(), note)
             if (stock.isEmpty()) {
-                Text(
+                IconText(
                     "Fridge is empty: buy some food",
                     color = Palette.Ink,
                     fontWeight = FontWeight.Bold,
@@ -243,7 +244,7 @@ private fun StockItem(id: String, name: String, count: Int, enabled: Boolean, on
     ) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Canvas(Modifier.size(48.dp)) { HouseArt.draw(this, id, Rect(0f, 0f, size.width, size.height), 0f, alpha = if (enabled) 1f else 0.6f) }
-            Text(name, fontSize = 10.sp, lineHeight = 11.sp, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
+            IconText(name, fontSize = 10.sp, lineHeight = 11.sp, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
         }
         Box(
             Modifier
@@ -254,7 +255,7 @@ private fun StockItem(id: String, name: String, count: Int, enabled: Boolean, on
                 .border(1.5.dp, Color.White, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
-            Text("$count", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
+            IconText("$count", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold)
         }
     }
 }
@@ -317,7 +318,7 @@ fun BedroomRoom(env: RoomEnv, active: Boolean, speaker: Speaker) {
         },
         tray = {
             NeedHud(if (needs.asleep) "💤" else "⚡", "Energy", needs.energy.toFloat(), note, dark = true)
-            Text(
+            IconText(
                 if (needs.asleep) "The lamp is off. Tap it to turn it on and wake him." else "💡 Tap the lamp to switch it off. He will go to sleep.",
                 color = Color(0xFFE6E2FF),
                 fontSize = 12.sp,

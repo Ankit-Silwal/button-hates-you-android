@@ -79,6 +79,7 @@ import com.ankitsilwal.buttonhatesyou.ui.theme.LocalReduceMotion
 import com.ankitsilwal.buttonhatesyou.ui.theme.Palette
 import kotlinx.coroutines.delay
 import kotlin.math.floor
+import com.ankitsilwal.buttonhatesyou.ui.art.IconText
 
 /** Holds the running game; read when the pause menu opens. */
 private class LiveRun { var game: Game? = null }
@@ -284,10 +285,10 @@ fun GameScreen(
         if (mode == Mode.Title) {
             Backdrop(info) {
                 GameArt(info.id, Modifier.size(120.dp, 160.dp), corner = 22.dp)
-                Text(info.name, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
-                Text(info.blurb, textAlign = TextAlign.Center, color = Palette.InkSoft)
-                Text(info.howTo ?: "", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, modifier = Modifier.background(Palette.Wall, RoundedCornerShape(14.dp)).padding(10.dp))
-                Text((info.rule ?: "") + if (best > 0) " · Best: ${fmt(best)}" else "", textAlign = TextAlign.Center, fontSize = 13.sp, color = Color(0xFF8A5A10))
+                IconText(info.name, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+                IconText(info.blurb, textAlign = TextAlign.Center, color = Palette.InkSoft)
+                IconText(info.howTo ?: "", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, modifier = Modifier.background(Palette.Wall, RoundedCornerShape(14.dp)).padding(10.dp))
+                IconText((info.rule ?: "") + if (best > 0) " · Best: ${fmt(best)}" else "", textAlign = TextAlign.Center, fontSize = 13.sp, color = Color(0xFF8A5A10))
                 Pill("Play", ::start, icon = "▶", modifier = Modifier.fillMaxWidth(0.7f), height = 58.dp)
                 Pill("Back", onBack, kind = PillKind.Ghost)
             }
@@ -302,21 +303,21 @@ fun GameScreen(
                     Box(Modifier.size(110.dp, 120.dp), contentAlignment = Alignment.Center) {
                         Avatar(look, Face(mood = if (good) Mood.Sad else Mood.Smug), size = 74.dp)
                     }
-                    Text(if (good) "NICE RUN" else "GAME OVER", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, color = Palette.InkSoft)
+                    IconText(if (good) "NICE RUN" else "GAME OVER", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, color = Palette.InkSoft)
                     Row(verticalAlignment = Alignment.Bottom) {
-                        Text(fmt(r.score), fontSize = 44.sp, fontWeight = FontWeight.ExtraBold)
-                        Text(" " + (info.unit ?: ""), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft, modifier = Modifier.padding(bottom = 8.dp))
+                        IconText(fmt(r.score), fontSize = 44.sp, fontWeight = FontWeight.ExtraBold)
+                        IconText(" " + (info.unit ?: ""), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Palette.InkSoft, modifier = Modifier.padding(bottom = 8.dp))
                     }
-                    Text((if (r.newBest) "New best!" else "Best: ${fmt(r.best)}") + if (r.continues > 0) " · Continued ×${r.continues}" else "", fontWeight = FontWeight.Bold, color = if (r.newBest) Palette.BtnDark else Palette.Ink)
-                    Text("“${if (good) info.quips?.goal else info.quips?.fail}”", fontStyle = FontStyle.Italic, textAlign = TextAlign.Center, color = Palette.InkSoft)
+                    IconText((if (r.newBest) "New best!" else "Best: ${fmt(r.best)}") + if (r.continues > 0) " · Continued ×${r.continues}" else "", fontWeight = FontWeight.Bold, color = if (r.newBest) Palette.BtnDark else Palette.Ink)
+                    IconText("“${if (good) info.quips?.goal else info.quips?.fail}”", fontStyle = FontStyle.Italic, textAlign = TextAlign.Center, color = Palette.InkSoft)
                     val coins = r.earned?.coins ?: 0
-                    Text("+${fmt(coins)} 🪙" + ((r.earned?.diamonds ?: 0).takeIf { it > 0 }?.let { " +$it 💎" } ?: ""), fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, color = if (coins > 0) Color(0xFF8A5A10) else Palette.InkSoft, modifier = Modifier.background(Color(0xFFFFEFC4), RoundedCornerShape(50)).padding(horizontal = 18.dp, vertical = 6.dp))
+                    IconText("+${fmt(coins)} 🪙" + ((r.earned?.diamonds ?: 0).takeIf { it > 0 }?.let { " +$it 💎" } ?: ""), fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, color = if (coins > 0) Color(0xFF8A5A10) else Palette.InkSoft, modifier = Modifier.background(Color(0xFFFFEFC4), RoundedCornerShape(50)).padding(horizontal = 18.dp, vertical = 6.dp))
                     val ready = r.earned?.ready.orEmpty()
                     if (ready.isNotEmpty()) {
                         val names = ready.map { it.name }
                         Pill("Achievement ready! " + names.take(2).joinToString(", ") + if (names.size > 2) " +${names.size - 2}" else "", onAchievements, icon = "🏆", kind = PillKind.Alt, height = 46.dp)
                     }
-                    Text(nextTier(info, r), fontSize = 13.sp, textAlign = TextAlign.Center, color = Palette.InkSoft)
+                    IconText(nextTier(info, r), fontSize = 13.sp, textAlign = TextAlign.Center, color = Palette.InkSoft)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Pill("Games", onBack, kind = PillKind.Ghost)
                         Pill("Play again", { if (tryPlay()) start() }, icon = "↻")
@@ -375,16 +376,16 @@ private fun ContinueCard(offer: Offer, diamonds: Int, onYes: () -> Unit, onNo: (
     PopCard(onNo, dismissable = false) {
         Box(Modifier.size(84.dp), contentAlignment = Alignment.Center) {
             Canvas(Modifier.size(84.dp)) { ringArc(ring.value) }
-            Text("${kotlin.math.ceil(ring.value * OFFER_SEC).toInt()}", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+            IconText("${kotlin.math.ceil(ring.value * OFFER_SEC).toInt()}", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
         }
-        Text("Continue?", style = MaterialTheme.typography.headlineSmall)
-        Text("Pick up right where you crashed, score and all.", color = Palette.InkSoft, textAlign = TextAlign.Center)
+        IconText("Continue?", style = MaterialTheme.typography.headlineSmall)
+        IconText("Pick up right where you crashed, score and all.", color = Palette.InkSoft, textAlign = TextAlign.Center)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("Continue ${offer.n} of ${Rules.MAX_CONTINUES}", fontSize = 13.sp, fontWeight = FontWeight.Bold)
-            Text("You have $diamonds 💎", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (short) Palette.Alert else Palette.Ink)
+            IconText("Continue ${offer.n} of ${Rules.MAX_CONTINUES}", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+            IconText("You have $diamonds 💎", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (short) Palette.Alert else Palette.Ink)
         }
         Pill("Continue for ${offer.cost} 💎", onYes, enabled = !short, modifier = Modifier.fillMaxWidth(), height = 56.dp)
-        if (short) Text("Not enough diamonds. Earn them from Achievements.", fontSize = 12.sp, color = Palette.InkSoft, textAlign = TextAlign.Center)
+        if (short) IconText("Not enough diamonds. Earn them from Achievements.", fontSize = 12.sp, color = Palette.InkSoft, textAlign = TextAlign.Center)
         Pill("No thanks", onNo, kind = PillKind.Ghost)
     }
 }
