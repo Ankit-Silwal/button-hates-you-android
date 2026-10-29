@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -36,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -69,14 +71,17 @@ import com.ankitsilwal.buttonhatesyou.games.Game
 import com.ankitsilwal.buttonhatesyou.games.GameHost
 import com.ankitsilwal.buttonhatesyou.games.GameSpec
 import com.ankitsilwal.buttonhatesyou.ui.art.GameIconTile
-import com.ankitsilwal.buttonhatesyou.ui.common.IconChip
 import com.ankitsilwal.buttonhatesyou.ui.common.Pill
 import com.ankitsilwal.buttonhatesyou.ui.common.PillKind
 import com.ankitsilwal.buttonhatesyou.ui.common.fmt
 import com.ankitsilwal.buttonhatesyou.ui.dialogs.PopCard
+import com.ankitsilwal.buttonhatesyou.ui.theme.LocalReduceMotion
 import com.ankitsilwal.buttonhatesyou.ui.theme.Palette
 import kotlinx.coroutines.delay
 import kotlin.math.floor
+
+/** Holds the running game; read when the pause menu opens. */
+private class LiveRun { var game: Game? = null }
 
 /** The offer after a crash: the nth Continue and its price. */
 private data class Offer(val n: Int, val cost: Int)
@@ -167,11 +172,12 @@ fun GameScreen(
     var mode by remember { mutableStateOf(Mode.Title) }
     var run by remember { mutableIntStateOf(0) }
     var paused by remember { mutableStateOf(false) }
-    var quitAsk by remember { mutableStateOf(false) }
+    var ask by remember { mutableStateOf(MenuAsk.None) }
     var offer by remember { mutableStateOf<Offer?>(null) }
     var result by remember { mutableStateOf<RunResult?>(null) }
     var continues by remember { mutableIntStateOf(0) }
     var current by remember { mutableStateOf<ContinueGame?>(null) }
+    val live = remember { LiveRun() } // this run's game, for the pause menu's score (set while composing, so not state)
     val best = Achievements.statsOf(wallet).best[gameId] ?: 0
 
     Immersive(mode == Mode.Play)
@@ -180,14 +186,28 @@ fun GameScreen(
         continues = 0
         offer = null
         paused = false
+        ask = MenuAsk.None
         run++
         mode = Mode.Play
     }
 
+    fun resume() {
+        paused = false
+        ask = MenuAsk.None
+    }
+
+    // a restart is a new run: it spends energy like "Play again" (if he refuses, the gate says why)
+    fun restart() {
+        if (tryPlay()) start() else ask = MenuAsk.None
+    }
+
+    // back opens the pause menu; in the menu it backs out of a question, then resumes
     BackHandler(mode == Mode.Play) {
-        if (offer == null) {
-            paused = true
-            quitAsk = true
+        when {
+            offer != null -> Unit
+            !paused -> paused = true
+            ask != MenuAsk.None -> ask = MenuAsk.None
+            else -> resume()
         }
     }
     BackHandler(mode != Mode.Play, onBack)
@@ -196,7 +216,7 @@ fun GameScreen(
         if (mode == Mode.Play) {
             val wrapped = remember(run) {
                 GameSpec(spec.id) { ctx ->
-                    ContinueGame(spec.create(ctx)) { g ->
+                    ContinueGame(spec.create(ctx).also { live.game = it }) { g ->
                         val n = continues + 1
                         val cost = Rules.continueCost(n)
                         if (cost == null) false else {
@@ -207,11 +227,14 @@ fun GameScreen(
                     }
                 }
             }
+            val reduce = LocalReduceMotion.current
+            val blur by animateDpAsState(if (paused && !reduce) 14.dp else 0.dp, tween(220), label = "pause-blur")
             key(run) {
                 GameHost(
                     spec = wrapped,
                     look = look,
-                    paused = paused || offer != null || quitAsk,
+                    modifier = Modifier.blur(blur),
+                    paused = paused || offer != null,
                     onOver = { score, coins, ms ->
                         val before = Achievements.statsOf(store.wallet.value).best[gameId] ?: 0
                         // Please Don't is a story game: finishing it (65 presses) claims it once
@@ -226,26 +249,20 @@ fun GameScreen(
                     },
                 )
             }
-            Box(Modifier.align(Alignment.TopEnd).safeDrawingPadding().padding(8.dp)) {
-                IconChip("⏸", "Pause", { paused = true })
+            if (!paused && offer == null) {
+                PauseChip({ paused = true }, Modifier.align(Alignment.TopEnd).safeDrawingPadding().padding(10.dp))
             }
-            if (paused && !quitAsk && offer == null) {
-                PopCard({ paused = false }) {
-                    Text("Paused", style = MaterialTheme.typography.headlineSmall)
-                    Text("He is enjoying the break more than you are.", color = Palette.InkSoft, textAlign = TextAlign.Center)
-                    Pill("Resume", { paused = false }, icon = "▶")
-                    Pill("Quit", { quitAsk = true }, kind = PillKind.Ghost)
-                }
-            }
-            if (quitAsk) {
-                PopCard({ quitAsk = false; paused = false }) {
-                    Text("Quit this run?", style = MaterialTheme.typography.headlineSmall)
-                    Text("A run you quit pays nothing. He will be delighted.", color = Palette.InkSoft, textAlign = TextAlign.Center)
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Pill("Keep playing", { quitAsk = false; paused = false }, kind = PillKind.Ghost)
-                        Pill("Quit", onBack)
-                    }
-                }
+            if (paused && offer == null) {
+                PauseMenu(
+                    info = info,
+                    score = live.game?.let { if (info.payout?.coins == true) it.coins else it.score },
+                    best = best,
+                    ask = ask,
+                    onAsk = { ask = it },
+                    onResume = ::resume,
+                    onRestart = ::restart,
+                    onQuit = onBack,
+                )
             }
             offer?.let { o ->
                 ContinueCard(o, wallet.diamonds,
