@@ -1,0 +1,10 @@
+# Compiled ahead of time on install (ProfileInstaller), so the app's own code
+# and the Compose/graphics paths it leans on start fast instead of interpreted.
+HSPLcom/ankitsilwal/buttonhatesyou/**->**(**)**
+Lcom/ankitsilwal/buttonhatesyou/**;
+HSPLandroidx/compose/runtime/**->**(**)**
+HSPLandroidx/compose/ui/**->**(**)**
+HSPLandroidx/compose/foundation/**->**(**)**
+HSPLandroidx/compose/animation/**->**(**)**
+HSPLandroidx/compose/material3/**->**(**)**
+Landroidx/compose/**;

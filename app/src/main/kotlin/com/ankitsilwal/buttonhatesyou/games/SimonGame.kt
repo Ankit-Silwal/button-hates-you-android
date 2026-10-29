@@ -319,7 +319,7 @@ class SimonGame(private val ctx: GameContext) : Game {
             }
         }
 
-        private val rings = HashMap<Int, Sprite>()
+        private val rings = java.util.concurrent.ConcurrentHashMap<Int, Sprite>()
 
         // The neon rim of the floor in one colour, glow baked in.
         fun ring(color: Int): Sprite = rings.getOrPut(color) {
@@ -334,7 +334,7 @@ class SimonGame(private val ctx: GameContext) : Game {
             }
         }
 
-        private val bases = HashMap<Int, Sprite>()
+        private val bases = java.util.concurrent.ConcurrentHashMap<Int, Sprite>()
 
         // A flat ellipse of coloured light for a pad to stand in.
         fun base(color: Int): Sprite = bases.getOrPut(color) {

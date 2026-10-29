@@ -9,9 +9,13 @@ import com.ankitsilwal.buttonhatesyou.ui.App
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        // the splash stays up while Preload loads the save, sounds and art
+        installSplashScreen().setKeepOnScreenCondition { !Preload.ready }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent { App() }
+        // the UI is set only once warmed up: its drawing shares caches with the warm-up
+        Preload.start(this) {
+            runOnUiThread { if (!isDestroyed) setContent { App() } }
+        }
     }
 }

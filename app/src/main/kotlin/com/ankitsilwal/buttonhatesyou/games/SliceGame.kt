@@ -692,7 +692,7 @@ class SliceGame(private val ctx: GameContext) : Game {
             c.restore()
         }.also { splats[kind] = it }
 
-        private val items = HashMap<Int, Sprite>()
+        private val items = java.util.concurrent.ConcurrentHashMap<Int, Sprite>()
 
         // An item's sprite, centered, unrotated (cached per kind, and glyph for keys).
         fun item(kind: Int, glyph: Int): Sprite {

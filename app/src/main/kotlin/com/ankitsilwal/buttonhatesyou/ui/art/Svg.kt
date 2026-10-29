@@ -46,7 +46,7 @@ class Lin(val stops: Array<Pair<Float, Color>>, val x1: Float, val y1: Float, va
 
 class Rad(val stops: Array<Pair<Float, Color>>, val cx: Float, val cy: Float, val r: Float) : Fill
 
-private val colorCache = HashMap<String, Color>()
+private val colorCache = java.util.concurrent.ConcurrentHashMap<String, Color>()
 
 /** "#e2674f" / "#fff" / "#e2674f80" as a Color, times [a]. */
 fun col(hex: String, a: Float = 1f): Color {
@@ -79,8 +79,8 @@ fun rad(vararg stops: Pair<Float, Color>, cx: Float = 0.5f, cy: Float = 0.5f, r:
 
 /* ------------------------------- paths -------------------------------- */
 
-private val pathCache = HashMap<String, Path>()
-private val boundsCache = HashMap<String, Rect>()
+private val pathCache = java.util.concurrent.ConcurrentHashMap<String, Path>()
+private val boundsCache = java.util.concurrent.ConcurrentHashMap<String, Rect>()
 
 /** An SVG path string as a (cached, shared, never mutate it) Path. */
 fun svgPath(d: String): Path = pathCache.getOrPut(d) {

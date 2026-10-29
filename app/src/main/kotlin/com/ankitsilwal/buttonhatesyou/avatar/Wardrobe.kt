@@ -165,7 +165,7 @@ internal object Wardrobe {
         else -> null
     }
 
-    private val fabricCache = HashMap<String, Path>()
+    private val fabricCache = java.util.concurrent.ConcurrentHashMap<String, Path>()
 
     private fun fabric(kind: String): Path = fabricCache.getOrPut(kind) {
         val shape = if (kind == "blazer") {

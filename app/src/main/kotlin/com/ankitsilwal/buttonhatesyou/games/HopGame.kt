@@ -616,7 +616,7 @@ class HopGame(private val ctx: GameContext) : Game {
             c.drawPath(path, p)
         }.also { far[tint] = it }
 
-        private val clouds = HashMap<Int, Sprite>()
+        private val clouds = java.util.concurrent.ConcurrentHashMap<Int, Sprite>()
 
         // A puffy, lit cloud platform w wide, painted once per kind and width.
         fun cloud(kind: Int, w: Float, night: Boolean): Sprite {

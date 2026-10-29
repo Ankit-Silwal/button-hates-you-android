@@ -1784,7 +1784,7 @@ class ButtonRunGame(private val ctx: GameContext) : Game {
             }
         }
 
-        private val servers = HashMap<String, Sprite>()
+        private val servers = java.util.concurrent.ConcurrentHashMap<String, Sprite>()
         fun server(label: String): Sprite = servers.getOrPut(label) {
             val spam = label == "SPAM"
             makeSprite(72f, 120f) { c ->
@@ -1874,5 +1874,5 @@ class ButtonRunGame(private val ctx: GameContext) : Game {
 }
 
 // Colours by hex, parsed once (drawing code asks for them every frame).
-private val ccCache = HashMap<String, Int>()
+private val ccCache = java.util.concurrent.ConcurrentHashMap<String, Int>()
 private fun cc(hex: String): Int = ccCache.getOrPut(hex) { col(hex) }
