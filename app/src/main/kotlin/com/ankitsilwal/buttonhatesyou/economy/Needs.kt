@@ -25,8 +25,8 @@ data class NeedsState(
 enum class NeedsMood { Sleep, Sad, Hungry, Tired, Smug, Calm }
 
 object Needs {
-    const val hungerPerHour = 4.0 // awake: about a day from full to empty
-    const val energyPerHour = 3.0 // awake, doing nothing
+    const val hungerPerHour = 2.5 // awake: about a day and a half from full to empty
+    const val energyPerHour = 2.0 // awake, doing nothing
     const val sleepHungerFactor = 0.5 // asleep, he gets hungry at half speed
     const val sleepEnergyPerHour = 50.0 // asleep: empty to full in 2 hours
     const val floor = 15.0 // time alone never drags a need below this
@@ -34,7 +34,7 @@ object Needs {
     const val sleepDirtFactor = 0.3 // asleep, he hardly gets dirtier
 
     // What each kind of game costs to start ("adventure", "story")...
-    val PLAY_COST: Map<String, Double> = mapOf("adventure" to 2.0, "story" to 5.0)
+    val PLAY_COST: Map<String, Double> = mapOf("adventure" to 1.5, "story" to 4.0)
     // ...and how much dirt it kicks up.
     val PLAY_DIRT: Map<String, Double> = mapOf("adventure" to 1.5, "story" to 3.0)
     // From here he looks grubby, and from FILTHY_AT he refuses to go to bed.

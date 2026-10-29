@@ -81,9 +81,9 @@ class ProfileStoreTest {
         val s = store()
         assertTrue(s.play("adventure")) // starts the needs clock
         assertEquals(T, s.wallet.value.needs.at)
-        assertEquals(78.0, s.currentNeeds().energy, 0.0)
+        assertEquals(78.5, s.currentNeeds().energy, 0.0)
         clock += 2 * 3_600_000L
-        assertEquals(72.0, s.currentNeeds().energy, 0.0)
+        assertEquals(74.5, s.currentNeeds().energy, 0.0)
         assertTrue(s.sleep())
         assertFalse(s.sleep())
         assertEquals(Mood.Sleep, s.face().mood)
@@ -116,7 +116,7 @@ class ProfileStoreTest {
         s.play("adventure")
         clock += 3_600_000L
         val n = NeedsTicker(s).first()
-        assertEquals(NeedsState(76.0, 75.0, 3.0, false, clock), n)
+        assertEquals(NeedsState(77.5, 76.5, 3.0, false, clock), n)
         // a change to the wallet's needs is emitted right away
         val two = async { NeedsTicker(s).take(2).toList() }
         kotlinx.coroutines.yield()

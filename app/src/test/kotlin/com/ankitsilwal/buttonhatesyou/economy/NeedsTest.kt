@@ -11,11 +11,11 @@ import org.junit.Test
 
 class NeedsTest {
     @Test fun `needs drift with the clock like the web version`() {
-        // Values printed by the web version's needsAt.
-        assertEquals(NeedsState(68.0, 71.0, 4.5, false, T + 3 * HOUR + 1234), Needs.needsAt(NeedsState(80.0, 80.0, 0.0, false, T), T + 3 * HOUR + 1234))
-        assertEquals(NeedsState(48.0, 80.0, 10.45, true, T + HOUR), Needs.needsAt(NeedsState(50.0, 30.0, 10.0, true, T), T + HOUR))
+        // Awake: -2.5 hunger and -2 energy an hour (slower than the web's 4 and 3).
+        assertEquals(NeedsState(72.5, 74.0, 4.5, false, T + 3 * HOUR + 1234), Needs.needsAt(NeedsState(80.0, 80.0, 0.0, false, T), T + 3 * HOUR + 1234))
+        assertEquals(NeedsState(48.75, 80.0, 10.45, true, T + HOUR), Needs.needsAt(NeedsState(50.0, 30.0, 10.0, true, T), T + HOUR))
         // he wakes up by himself when energy is full (after 1.4 h), then drifts awake
-        assertEquals(NeedsState(32.8, 89.2, 16.03, false, T + 5 * HOUR), Needs.needsAt(NeedsState(50.0, 30.0, 10.0, true, T), T + 5 * HOUR))
+        assertEquals(NeedsState(39.25, 92.8, 16.03, false, T + 5 * HOUR), Needs.needsAt(NeedsState(50.0, 30.0, 10.0, true, T), T + 5 * HOUR))
         // the floor: time alone never drags a need below 15 (or pulls one up)
         assertEquals(NeedsState(15.0, 10.0, 100.0, false, T + 30 * HOUR), Needs.needsAt(NeedsState(20.0, 10.0, 99.0, false, T), T + 30 * HOUR))
         // a new player's clock hasn't started
@@ -51,11 +51,11 @@ class NeedsTest {
         assertNull("too hungry to play", apply(base, play("adventure", T0)))
         assertNotNull(apply(fed, play("adventure", T0)))
         assertNull("too tired", apply(fed.copy(needs = fed.needs.copy(energy = 1.0)), play("adventure", T0)))
-        assertNull("story costs more", apply(fed.copy(needs = fed.needs.copy(energy = 4.0)), play("story", T0)))
+        assertNull("story costs more", apply(fed.copy(needs = fed.needs.copy(energy = 3.0)), play("story", T0)))
         assertNull("asleep", apply(asleep, play("adventure", T0)))
         assertNull("unknown kind", apply(fed, play("nope", T0)))
         assertNull("no time", apply(fed, play("adventure", 0)))
-        assertEquals(88.0, fed.then(play("adventure", T0)).needs.energy, 0.0)
+        assertEquals(88.5, fed.then(play("adventure", T0)).needs.energy, 0.0)
         assertEquals("hungry", Needs.whyNot(base.needs, "adventure"))
         assertEquals("tired", Needs.whyNot(fed.needs.copy(energy = 1.0), "adventure"))
         assertEquals("asleep", Needs.whyNot(asleep.needs, "adventure"))
